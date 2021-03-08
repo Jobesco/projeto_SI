@@ -55,24 +55,62 @@ const planoDeFundo = {
 
 
 var testCircle = {
-  posX: 186,
-  posY: 296,
-  tamanho: 10,
+  posX: 155,
+  posY: 260,
+  tamanho: 75,
 
   desenha(){
-    contexto.fillRect
-  }
+    contexto.fillStyle='yellow'
+    contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho)
+  },
+
+
+  segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
+    console.log('peguei rota',rota)
+    //a cada X segundos, faz o boneco andar Y pixels na direção, até posX/posY ser igual ao x/y da rota
+    rota.forEach(element => {
+      let runX = (element.x != 0 ? true : false)
+      console.log('rodando agora',runX)
+
+      let done = setInterval(() => {
+        
+        if(runX){
+          this.posX += 1 // TODO verificar se soma ou subtrai, de acordo com a diferença dos valores
+        }else{
+          this.posY += 1
+        }
+
+        this.desenha()
+        console.log('posX,posY:',this.posX,this.posY)
+        
+      }, 2);
+
+      if((runX && this.posX == element.x) || (!runY && this.posY == element.y)){
+        clearInterval(done)
+      }
+
+      //! só p forçar uma parada
+      setTimeout(() => {
+        clearInterval(done)
+      }, 1000);
+    });
+
+    
+  },
 
 }
 
 function loop() {
   planoDeFundo.desenha();
+  testCircle.desenha()
   // flappyBird.desenha();
   // setInterval(function() {
   //   flappyBird.y = flappyBird.y + 1;
   // },400)
+
+  console.log('seguindo o caminho para viridian')
+  // testCircle.segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota)
   // requestAnimationFrame(loop);
-  
 }
 
 background.onload = loop;
@@ -119,9 +157,12 @@ var cidades_grafos = {
 
 var cidades_canvas = {
   indigoPlateau: {
-    posicao_tamanho: (30,50,100), //(x,y,raio)
-    rotas: [
-      {viridian: [(0,50),(30,0)]} //(x,y)
+    posicao_tamanho: {x:30,y:50,radius:100}, //(x,y,raio)
+    vizinhos: [
+      {
+        cidade: 'viridian',
+        rota: [{x:0,y:280},] //{x:110,y:0}
+      } //(x,y)
     ]
   }
 }
