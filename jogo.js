@@ -2,6 +2,8 @@ const sprites = new Image();
 sprites.src = './sprites.png';
 const background = new Image();
 background.src = './kanto_map_cities_resized.png'
+const cabesa = new Image()
+cabesa.src = './headSprite-removebg.png'
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
@@ -33,7 +35,7 @@ const planoDeFundo = {
   },
 };
 
-// const flappyBird = {
+// const cabesaObj = {
 //   spriteX: 0,
 //   spriteY: 0,
 //   largura: 33,
@@ -51,7 +53,6 @@ const planoDeFundo = {
 //   }
 // }
 
-
 var testCircle = {
   posX: 155,
   posY: 260,
@@ -67,17 +68,44 @@ var testCircle = {
 }
 
 function segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
-  let runX = (rota[0].x != 0 ? true : false)
-  console.log('rodando agora',runX)
+  rota.forEach(element => {
+    let done = false
+    while(!done){
+      let runX = (element.x != 0 ? true : false)
 
-  if(runX && testCircle.posX != testCircle.posIniX + rota[0].x){
-    testCircle.posX += 1 // TODO verificar se soma ou subtrai, de acordo com a diferença dos valores
-  }else if(!runX && testCircle.posY != testCircle.posIniY + rota[0].y){
-    testCircle.posY += 1
-  }
+      if(runX){
+        if(testCircle.posX < testCircle.posIniX + element.x){
+          testCircle.posX += 1
+        }
+        else if(testCircle.posX > testCircle.posIniX + element.x){
+          testCircle.posX -= 1
+        }
+        else{
+          done = true
+          testCircle.posIniX = testCircle.posX
+        }
+      }
+      else if(!runX){
+        if(testCircle.posY < testCircle.posIniY + element.y){
+          testCircle.posY += 1
+        }
+        else if(testCircle.posY > testCircle.posIniY + element.y){
+          testCircle.posY -= 1
+        }
+        else{
+          done = true
+          testCircle.posIniY = testCircle.posY
+
+        }
+      }
+
+      testCircle.desenha()
+    }
+    
+  });
+  
 
   // console.log('testCircle.posY',testCircle.posY,'\ntestCircle.posIniY + rota[0].y',testCircle.posIniY + rota[0].y)
-  testCircle.desenha()
 
   // if((runX && testCircle.posX == testCircle.posX + rota[0].x) || (!runX && testCircle.posY == testCircle.posY + rota[0].y)) console.log('TEMRINOAUOAUAUAOUA')
   
@@ -85,7 +113,8 @@ function segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
 
 function loop() {
   planoDeFundo.desenha();
-  testCircle.desenha()
+  testCircle.desenha();
+  // cabesaObj.desenha();
   // flappyBird.desenha();
   // setInterval(function() {
   //   flappyBird.y = flappyBird.y + 1;
@@ -100,7 +129,7 @@ function loop() {
 }
 
 var x = 0
-background.onload = loop;
+background.onload = loop
 
 
 var cidades_grafos = {
@@ -148,7 +177,7 @@ var cidades_canvas = {
     vizinhos: [
       {
         cidade: 'viridian',
-        rota: [{x:0,y:280},] //{x:110,y:0}
+        rota: [{x:0,y:280},{x:110,y:0}]
       } //(x,y)
     ]
   }
