@@ -1,5 +1,3 @@
-console.log('[DevSoutinho] Flappy Bird');
-
 const sprites = new Image();
 sprites.src = './sprites.png';
 const background = new Image();
@@ -23,7 +21,7 @@ const planoDeFundo = {
   dHeight: background.height,
 
   desenha() {
-    console.log(background.width,background.height,'aaa')
+    // console.log(background.width,background.height,'aaa')
     contexto.drawImage(
       background,
       planoDeFundo.sX, planoDeFundo.sY,
@@ -58,46 +56,31 @@ var testCircle = {
   posX: 155,
   posY: 260,
   tamanho: 75,
+  posIniX:155,
+  posIniY:260,
 
   desenha(){
     contexto.fillStyle='yellow'
     contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho)
   },
 
+}
 
-  segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
-    console.log('peguei rota',rota)
-    //a cada X segundos, faz o boneco andar Y pixels na direção, até posX/posY ser igual ao x/y da rota
-    rota.forEach(element => {
-      let runX = (element.x != 0 ? true : false)
-      console.log('rodando agora',runX)
+function segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
+  let runX = (rota[0].x != 0 ? true : false)
+  console.log('rodando agora',runX)
 
-      let done = setInterval(() => {
-        
-        if(runX){
-          this.posX += 1 // TODO verificar se soma ou subtrai, de acordo com a diferença dos valores
-        }else{
-          this.posY += 1
-        }
+  if(runX && testCircle.posX != testCircle.posIniX + rota[0].x){
+    testCircle.posX += 1 // TODO verificar se soma ou subtrai, de acordo com a diferença dos valores
+  }else if(!runX && testCircle.posY != testCircle.posIniY + rota[0].y){
+    testCircle.posY += 1
+  }
 
-        this.desenha()
-        console.log('posX,posY:',this.posX,this.posY)
-        
-      }, 2);
+  // console.log('testCircle.posY',testCircle.posY,'\ntestCircle.posIniY + rota[0].y',testCircle.posIniY + rota[0].y)
+  testCircle.desenha()
 
-      if((runX && this.posX == element.x) || (!runY && this.posY == element.y)){
-        clearInterval(done)
-      }
-
-      //! só p forçar uma parada
-      setTimeout(() => {
-        clearInterval(done)
-      }, 1000);
-    });
-
-    
-  },
-
+  // if((runX && testCircle.posX == testCircle.posX + rota[0].x) || (!runX && testCircle.posY == testCircle.posY + rota[0].y)) console.log('TEMRINOAUOAUAUAOUA')
+  
 }
 
 function loop() {
@@ -108,11 +91,15 @@ function loop() {
   //   flappyBird.y = flappyBird.y + 1;
   // },400)
 
-  console.log('seguindo o caminho para viridian')
-  // testCircle.segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota)
-  // requestAnimationFrame(loop);
+  // console.log('seguindo o caminho para viridian')
+  // console.log(testCircle.posY,cidades_canvas.indigoPlateau.vizinhos[0].rota[0].y)
+  segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota)
+
+  
+  requestAnimationFrame(loop);
 }
 
+var x = 0
 background.onload = loop;
 
 
