@@ -28,6 +28,7 @@ const planoDeFundo = {
   },
 };
 
+
 const testCircle = {
   posX: 192,
   posY: 303,
@@ -81,8 +82,8 @@ function segueRota (rota) {
   if (rota[visit] == null) {
     // console.log('Acabou');
     visit = 0;
-    testCircle.posIniX = testCircle.posX = 192;
-    testCircle.posIniY = testCircle.posY = 303;
+    testCircle.posIniX = testCircle.posX = initialPosX;
+    testCircle.posIniY = testCircle.posY = initialPosY;
     route = route + 1;
     // cancelAnimationFrame(animation);
     return;
@@ -193,7 +194,7 @@ var cidades_canvas = {
     {
       cidade: 'lavender',
       rota: [{
-        x: 225,
+        x: 210,
         y: 0,
       },
       {
@@ -596,60 +597,75 @@ let animation = null;
 let tmpRoutes = [];
 
 console.log('Iniciando App');
-console.log('Caminho mais curto', encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
 let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
+console.log('Caminho mais curto', arrayTemp);
 console.log('Temp:', tmpRoutes);
+const tempSet = new Set(tmpRoutes)
+tmpRoutes = [...tempSet]
+//TODO verificar igualdade das rotas temporárias, infelizmente minha net caiu e eu não pude fazer mais nada realmente significante
 
 //transformar arrayTemp em um conjunto de coordenadas
 //pega as coordenadas do primeiro, depois os vizinhos de todos os outros
-let turn = 0
 let actual_city = null
-let arrayTeste = []
+let arrayTeste2 = []
 let initialPosX = 0
 let initialPosY = 0
-arrayTemp.forEach((elem) => {
-  if(turn != 0){ //ignora o primeiro
-    arrayTeste.push(cidades_canvas[actual_city].vizinhos[elem])
+for (let index = 0; index < arrayTemp.length-1; index++) {
+  if(index == 0){
+    initialPosX = cidades_canvas[arrayTemp[index]].x
+    initialPosY = cidades_canvas[arrayTemp[index]].y
   }
-  else{
-    turn++
-    actual_city = elem
-    initialPosX = cidades_canvas[actual_city].x
-    initialPosY = cidades_canvas[actual_city].y
+  if(index+1 != arrayTemp.length){ //roda código diferente se estiver pra acabar
+    console.log('agora estou em',arrayTemp[index],'preciso achar a rota de',arrayTemp[index+1])
+    // console.log(arrayTemp[index])
+
+    //procura no array de vizinhos o que tem cidade igual a ele
+    let cidade = cidades_canvas[arrayTemp[index]].vizinhos.find(elem2 => {
+      return elem2.cidade === arrayTemp[index+1]
+    })
+    console.log('achei a cidade vizinha',cidade.rota)
+    cidade.rota.forEach(element => {
+      arrayTeste2.push(element)  
+    });
+     
   }
-  
-})
+}
+testCircle.posIniX = initialPosX
+testCircle.posIniY = initialPosY
+testCircle.posX = initialPosX
+testCircle.posY = initialPosY
 
 let arraySupremo = [
-  [
-    {
-      x:0,
-      y:280,
-    },
-    {
-      x:110,
-      y:0,
-    },
-    {
-      x: 0,
-      y: -220,
-    }
-  ],
-  [
-    {
-      x:0,
-      y:280,
-    },
-    {
-      x:110,
-      y:0,
-    },
-    {
-      x: 0,
-      y: 170,
-    }
-  ]
+  // [
+  //   {
+  //     x:0,
+  //     y:280,
+  //   },
+  //   {
+  //     x:110,
+  //     y:0,
+  //   },
+  //   {
+  //     x: 0,
+  //     y: -220,
+  //   }
+  // ],
+  // [
+  //   {
+  //     x:0,
+  //     y:280,
+  //   },
+  //   {
+  //     x:110,
+  //     y:0,
+  //   },
+  //   {
+  //     x: 0,
+  //     y: 170,
+  //   }
+  // ]
 ]
+arraySupremo.push(arrayTeste2)
 
 function loop() {
   // console.log(route)
@@ -663,26 +679,26 @@ function loop() {
   animation = requestAnimationFrame(loop);
 }
 
-arrayTeste =[
-{
-  x:0,
-  y:280,
-},
-{
-  x:110,
-  y:0,
-},
-{
-  x: 0,
-  y: -220,
-}]
+// arrayTeste =[
+// {
+//   x:0,
+//   y:280,
+// },
+// {
+//   x:110,
+//   y:0,
+// },
+// {
+//   x: 0,
+//   y: -220,
+// }]
 
-function loop() {
-  planoDeFundo.desenha();
-  segueRota(arrayTeste);
-  frames = frames + 1;
-  // console.log('Frame: ', frames);
-  requestAnimationFrame(loop);
-}
+// function loop() {
+//   planoDeFundo.desenha();
+//   segueRota(arrayTeste);
+//   frames = frames + 1;
+//   // console.log('Frame: ', frames);
+//   requestAnimationFrame(loop);
+// }
 
 background.onload = loop();
