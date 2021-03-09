@@ -669,6 +669,9 @@ let arraySupremo = [
 ]
 arraySupremo.push(arrayTeste2)
 
+//TODO rodar com um botão
+//TODO escolher o inicio e fim
+
 function loop() {
   // console.log(route)
   if (route >= arraySupremo.length) {
