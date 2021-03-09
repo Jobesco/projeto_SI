@@ -114,45 +114,6 @@ var x = 0
 background.onload = loop
 
 
-var cidades_grafos = {
-  indigoPlateau: {
-    vizinhos: [
-      {
-        cidade: 'viridian',
-        distancia: 0,
-      },
-    ],
-  },
-  viridian: {
-    vizinhos: [
-      {
-        cidade: 'indigoPlateau',
-        distancia: 0,
-      },
-      {
-        cidade: 'pewter',
-        distancia: 0,
-      },
-      {
-        cidade: 'pallet',
-        distancia: 0,
-      }
-    ],
-  },
-  pewter: {
-    vizinhos: [
-      {
-        cidade: 'cerulean',
-        distancia: 0,
-      },
-      {
-        cidade: 'viridian',
-        distancia: 0,
-      },
-    ],
-  },
-}
-
 var cidades_canvas = {
   indigoPlateau: {
     posicao_tamanho: {
@@ -177,21 +138,111 @@ var cidades_canvas = {
   }
 }
 
-/*
-(cidade1, cidade2, distancia)
-(Pallet Town, Viridian City, 10)
-(Viridian City, Indigo Plateau, 30)
-(Viridian City, Pewter City, 15)
-(Pewter City, Cerulean City, 20)
-(Cerulean City, Lavender Town, 15)
-(Cerulean City, Saffron City, 10)
-(Lavender Town, Saffron City, 10)
-(Saffron City, Celadon City, 10)
-(Vermilion City, Saffron City, 10)
-(Vermilion City, Lavender Town, 15)
-(Vermilion City, Fuchsia City, 20)
-(Lavender Town, Fuchsia City, 20)
-(Fuchsia City, Celadon City,  25)
-(Fuchsia City, Cinnabar Island, 20)
-(Cinnabar Island, Pallet Town, 15)
-*/
+//-----------------------------------------------INICIO DO ALGORITMO------------------------------------------
+
+let grafo = {
+  indigoPlateau: {viridian: 30},
+  viridian: {indigoPlateau: 30, pewter: 15, pallet: 10},
+  pewter: {viridian: 15, cerulean: 20},
+  cerulean: {pewter: 20, lavender: 15, saffron: 10},
+  saffron: {cerulean: 10, lavender: 10, celadon: 10, vermilion: 10},
+  celadon: {saffron: 10, fuchsia: 45},
+  vermilion: {saffron: 10, lavender: 15, fuchsia: 20},
+  lavender: {cerulean: 15, saffron: 10, vermilion: 15, fuchsia: 20},
+  fuchsia: {vermilion: 20, lavender: 20, celadon: 45, cinnabar: 50},
+  cinnabar: {fuchsia: 50, pallet: 35},
+  pallet: {cinnabar: 35, viridian: 10},
+};
+
+let nohMaisPerto = (distancias, visitados) => {
+
+  let maisCurto = null;
+
+  for (let noh in distancias) {
+
+      let atualMaisCurto =
+      maisCurto === null || distancias[noh] < distancias[maisCurto];
+
+
+      if (atualMaisCurto && !visitados.includes(noh)) {
+
+          maisCurto = noh;
+      }
+  }
+  return maisCurto;
+};
+
+let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
+
+
+  let distancias = {};
+  distancias[nohFim] = "Infinity";
+  distancias = Object.assign(distancias, grafo[nohInicio]);
+
+  let pais = { nohFim: null };
+  for (let filho in grafo[nohInicio]) {
+      pais[filho] = nohInicio;
+  }
+
+
+  let visitados = [];
+
+  let noh = nohMaisPerto(distancias, visitados);
+
+  while (noh) {
+
+      let distancia = distancias[noh];
+      let filhos = grafo[noh]; 
+
+
+      for (let filho in filhos) {
+
+
+          if (String(filho) === String(nohInicio)) {
+              continue;
+          } else {
+
+              let novaDistancia = distancia + filhos[filho];
+
+              if (!distancias[filho] || distancias[filho] > novaDistancia) {
+
+                  distancias[filho] = novaDistancia;
+
+                  pais[filho] = noh;
+                  let caminhoMaisCurtoAux = [noh];
+                  let paiAux = pais[noh];
+                  while (paiAux) {
+                      caminhoMaisCurtoAux.push(paiAux);
+                      paiAux = pais[paiAux];
+                  }
+                  console.log(caminhoMaisCurtoAux.reverse());
+              }
+          }
+      }
+
+      visitados.push(noh);
+
+      noh = nohMaisPerto(distancias, visitados);
+  }
+
+
+  let caminhoMaisCurto = [nohFim];
+  let pai = pais[nohFim];
+  while (pai) {
+      caminhoMaisCurto.push(pai);
+      pai = pais[pai];
+  }
+  caminhoMaisCurto.reverse();
+
+
+  let resultados = {
+      distancia: distancias[nohFim],
+      caminho: caminhoMaisCurto,
+  };
+
+  return resultados;
+};
+
+console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+
+//-----------------------------------------------FIM DO ALGORITMO--------------------------------------------------
