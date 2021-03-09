@@ -161,19 +161,17 @@ let grafo = {
 };
 
 let nohMaisPerto = (distancias, visitados) => {
-  // create a default value for shortest
+
   let maisCurto = null;
 
-  // for each noh in the distancias object
   for (let noh in distancias) {
-      // if no noh has been assigned to maisCurto yet
-      // or if the current noh's distancia is smaller than the current maisCurto
+
       let atualMaisCurto =
       maisCurto === null || distancias[noh] < distancias[maisCurto];
 
-      // and if the current noh is in the unvisitados set
+
       if (atualMaisCurto && !visitados.includes(noh)) {
-          // update maisCurto to be the current noh
+
           maisCurto = noh;
       }
   }
@@ -182,42 +180,40 @@ let nohMaisPerto = (distancias, visitados) => {
 
 let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
-  // track distancias from the start noh using a hash object
+
   let distancias = {};
   distancias[nohFim] = "Infinity";
   distancias = Object.assign(distancias, grafo[nohInicio]);
-  // track paths using a hash object
+
   let pais = { nohFim: null };
   for (let filho in grafo[nohInicio]) {
       pais[filho] = nohInicio;
   }
 
-  // collect visitados nohs
+
   let visitados = [];
-  // find the nearest noh
+
   let noh = nohMaisPerto(distancias, visitados);
 
-  // for that noh:
   while (noh) {
-      // find its distancia from the start noh & its filho nohs
+
       let distancia = distancias[noh];
       let filhos = grafo[noh]; 
 
-      // for each of those filho nohs:
+
       for (let filho in filhos) {
 
-          // make sure each filho noh is not the start noh
+
           if (String(filho) === String(nohInicio)) {
               continue;
           } else {
-              // save the distancia from the start noh to the filho noh
+
               let novaDistancia = distancia + filhos[filho];
-              // if there's no recorded distancia from the start noh to the filho noh in the distancias object
-              // or if the recorded distancia is shorter than the previously stored distancia from the start noh to the filho noh
+
               if (!distancias[filho] || distancias[filho] > novaDistancia) {
-                  // save the distancia to the object
+
                   distancias[filho] = novaDistancia;
-                  // record the path
+
                   pais[filho] = noh;
                   let caminhoMaisCurtoAux = [noh];
                   let paiAux = pais[noh];
@@ -229,14 +225,13 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
               }
           }
       }
-      // move the current noh to the visitados set
+
       visitados.push(noh);
-      // move to the nearest neighbor noh
+
       noh = nohMaisPerto(distancias, visitados);
   }
 
-  // using the stored paths from start noh to end noh
-  // record the shortest path
+
   let caminhoMaisCurto = [nohFim];
   let pai = pais[nohFim];
   while (pai) {
@@ -245,12 +240,12 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
   }
   caminhoMaisCurto.reverse();
 
-  //this is the shortest path
+
   let resultados = {
       distancia: distancias[nohFim],
       caminho: caminhoMaisCurto,
   };
-  // return the shortest path & the end noh's distancia from the start noh
+
   return resultados;
 };
 
