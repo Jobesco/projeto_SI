@@ -1,5 +1,3 @@
-const sprites = new Image();
-sprites.src = './sprites.png';
 const background = new Image();
 background.src = './kanto_map_cities_resized.png'
 const cabesa = new Image()
@@ -42,7 +40,7 @@ const testCircle = {
     const salto = 1;
 
     if(frames % intervaloDeFrames === 0) {
-      console.log('Hora de atualizar');
+      // console.log('Hora de atualizar');
       if (newX === 0) {
         if (newY + this.posIniY > this.posY) {
           this.posY = this.posY + salto;
@@ -82,7 +80,7 @@ function segueRota (rota) {
   let i;
 
   if (rota[visit] == null) {
-    console.log('Acabou');
+    // console.log('Acabou');
     visit = 0;
     testCircle.posIniX = testCircle.posX = 155;
     testCircle.posIniY = testCircle.posY = 260;
@@ -90,8 +88,8 @@ function segueRota (rota) {
   }
 
   if (testCircle.atualiza(rota[visit].x, rota[visit].y)) {
-    console.log('rota:', rota[visit].x, rota[visit].y);
-    console.log('mudança:', testCircle.posX, testCircle.posY);
+    // console.log('rota:', rota[visit].x, rota[visit].y);
+    // console.log('mudança:', testCircle.posX, testCircle.posY);
     testCircle.desenha();
   }
   else {
@@ -99,20 +97,13 @@ function segueRota (rota) {
   }
 }
 
-let frames = 0;
-let visit = 0;
-
 function loop() {
   planoDeFundo.desenha();
   segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota);
   frames = frames + 1;
-  console.log('Frame: ', frames);
+  // console.log('Frame: ', frames);
   requestAnimationFrame(loop);
 }
-
-var x = 0
-background.onload = loop
-
 
 var cidades_canvas = {
   indigoPlateau: {
@@ -120,7 +111,7 @@ var cidades_canvas = {
       x:30,
       y:50,
       radius:100
-    }, //(x,y,raio)
+    },
     vizinhos: [
       {
         cidade: 'viridian',
@@ -138,7 +129,7 @@ var cidades_canvas = {
   }
 }
 
-//-----------------------------------------------INICIO DO ALGORITMO------------------------------------------
+// ----------------------------------------------- INICIO DO ALGORITMO ------------------------------------------ //
 
 let grafo = {
   indigoPlateau: {viridian: 30},
@@ -215,7 +206,7 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
                       caminhoMaisCurtoAux.push(paiAux);
                       paiAux = pais[paiAux];
                   }
-                  console.log(caminhoMaisCurtoAux.reverse());
+                  console.log('Caminho Temporário:', caminhoMaisCurtoAux.reverse());
               }
           }
       }
@@ -243,6 +234,14 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
   return resultados;
 };
 
-console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+// console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
 
-//-----------------------------------------------FIM DO ALGORITMO--------------------------------------------------
+// ----------------------------------------------- FIM DO ALGORITMO -------------------------------------------------- //
+
+let frames = 0;
+let visit = 0;
+
+console.log('Iniciando App');
+console.log('Caminho mais curto', encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+
+background.onload = loop();
