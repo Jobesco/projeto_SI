@@ -29,17 +29,17 @@ const planoDeFundo = {
 };
 
 const testCircle = {
-  posX: 155,
-  posY: 260,
+  posX: 192,
+  posY: 303,
   tamanho: 30,
-  posIniX:155,
-  posIniY:260,
+  posIniX:192,
+  posIniY:303,
 
   atualiza (newX, newY) {
     const intervaloDeFrames = 1;
     const salto = 1;
 
-    if(frames % intervaloDeFrames === 0) {
+    if(frames % intervaloDeFrames == 0) {
       // console.log('Hora de atualizar');
       if (newX === 0) {
         if (newY + this.posIniY > this.posY) {
@@ -77,13 +77,14 @@ const testCircle = {
 }
 
 function segueRota (rota) {
-  let i;
 
   if (rota[visit] == null) {
     // console.log('Acabou');
     visit = 0;
-    testCircle.posIniX = testCircle.posX = 155;
-    testCircle.posIniY = testCircle.posY = 260;
+    testCircle.posIniX = testCircle.posX = 192;
+    testCircle.posIniY = testCircle.posY = 303;
+    route = route + 1;
+    // cancelAnimationFrame(animation);
     return;
   }
 
@@ -97,36 +98,195 @@ function segueRota (rota) {
   }
 }
 
-function loop() {
-  planoDeFundo.desenha();
-  segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota);
-  frames = frames + 1;
-  // console.log('Frame: ', frames);
-  requestAnimationFrame(loop);
-}
-
 var cidades_canvas = {
   indigoPlateau: {
-    posicao_tamanho: {
-      x:30,
-      y:50,
-      radius:100
+    x:192,
+    y:303,
+    vizinhos: [{
+      cidade: 'viridian',
+      rota: [
+      {
+        x:0,
+        y:280,
+      },
+      {
+        x:110,
+        y:0,
+      }]
+    }]
+  },
+  viridian: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'indigoPlateau',
+      rota: [
+      {
+        x:-110,
+        y:0,
+      },
+      {
+        x:0,
+        y:-280,
+      }]
     },
+    {
+      cidade: 'pewter',
+      rota: [{
+        x: 0,
+        y: -220,
+      }]
+    },
+    {
+      cidade: 'pallet',
+      rota: [{
+        x: 0,
+        y: 170,
+      }]
+    }]
+  },
+  pewter: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'viridian',
+      rota: []
+    },
+    {
+      cidade: 'cerulean',
+      rota: []
+    }]
+  },
+  cerulean: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'pewter',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'saffron',
+      rota: []
+    }]
+  },
+  saffron: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'cerulean',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'celadon',
+      rota: []
+    },
+    {
+      cidade: 'vermilion',
+      rota: []
+    }]
+  },
+  celadon: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  vermilion: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  lavender: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'cerulean',
+      rota: []
+    },
+    {
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'vermilion',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  fuchsia: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'vermilion',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'celadon',
+      rota: []
+    },
+    {
+      cidade: 'cinnabar',
+      rota: []
+    }]
+  },
+  cinnabar: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'fuchsia',
+      rota: []
+    },
+    {
+      cidade: 'pallet',
+      rota: []
+    }]
+  },
+  pallet: {
+    x: 303,
+    y: 579,
     vizinhos: [
       {
+        cidade: 'cinnabar',
+        rota: []
+      },
+      {
         cidade: 'viridian',
-        rota: [
-        {
-          x:0,
-          y:280,
-        },
-        {
-          x:110,
-          y:0,
-        }]
-      } //(x,y)
+        rota: []
+      }
     ]
-  }
+  },
 }
 
 // ----------------------------------------------- INICIO DO ALGORITMO ------------------------------------------ //
@@ -207,6 +367,7 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
                       paiAux = pais[paiAux];
                   }
                   console.log('Caminho Temporário:', caminhoMaisCurtoAux.reverse());
+                  tmpRoutes.push(caminhoMaisCurtoAux);
               }
           }
       }
@@ -240,8 +401,76 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
 let frames = 0;
 let visit = 0;
+let route = 0;
+let animation = null;
+let tmpRoutes = [];
 
 console.log('Iniciando App');
 console.log('Caminho mais curto', encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
+console.log('Temp:', tmpRoutes);
+
+//transformar arrayTemp em um conjunto de coordenadas
+//pega as coordenadas do primeiro, depois os vizinhos de todos os outros
+let turn = 0
+let actual_city = null
+let arrayTeste = []
+let initialPosX = 0
+let initialPosY = 0
+arrayTemp.forEach((elem) => {
+  if(turn != 0){ //ignora o primeiro
+    arrayTeste.push(cidades_canvas[actual_city].vizinhos[elem])
+  }
+  else{
+    turn++
+    actual_city = elem
+    initialPosX = cidades_canvas[actual_city].x
+    initialPosY = cidades_canvas[actual_city].y
+  }
+  
+})
+
+let arraySupremo = [
+  [
+    {
+      x:0,
+      y:280,
+    },
+    {
+      x:110,
+      y:0,
+    },
+    {
+      x: 0,
+      y: -220,
+    }
+  ],
+  [
+    {
+      x:0,
+      y:280,
+    },
+    {
+      x:110,
+      y:0,
+    },
+    {
+      x: 0,
+      y: 170,
+    }
+  ]
+]
+
+function loop() {
+  // console.log(route)
+  if (route >= arraySupremo.length) {
+    route = 0;
+  }
+  planoDeFundo.desenha();
+  segueRota(arraySupremo[route]);
+  frames = frames + 1;
+  // console.log('Frame: ', frames);
+  animation = requestAnimationFrame(loop);
+}
 
 background.onload = loop();
