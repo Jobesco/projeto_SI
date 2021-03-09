@@ -1,10 +1,11 @@
 const background = new Image();
+const icone = new Image()
 background.src = './kanto_map_cities_resized.png'
-const cabesa = new Image()
-cabesa.src = './headSprite-removebg.png'
+icone.src = './headSprite-removebg.png'
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
+
 // TALVEZ o fato do canvas ter um tamanho variável pode dar merda, qlqr coisa a gt deixa dimensões específicas
 
 // [Plano de Fundo]
@@ -28,15 +29,14 @@ const planoDeFundo = {
   },
 };
 
-
-const testCircle = {
+const iconeCursor = {
   posX: 192,
   posY: 303,
   tamanho: 30,
   posIniX:192,
   posIniY:303,
 
-  atualiza (newX, newY) { // TODO saltos de X em X, se o salto for passar do valor desejado, ele só chega nele e pronto :)
+  atualiza (newX, newY) {
     const intervaloDeFrames = 1;
     const salto = 7;
     
@@ -89,7 +89,7 @@ const testCircle = {
   desenha() {
     // contexto.fillStyle='red';
     // contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho);
-    contexto.drawImage(cabesa,0,0,517,481,this.posX,this.posY,50,46.51)
+    contexto.drawImage(icone,0,0,517,481,this.posX,this.posY,50,46.51)
     //ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 }
@@ -99,32 +99,23 @@ function segueRota (rota) {
   if (rota[visit] == null) {
     // console.log('Acabou');
     visit = 0;
-    testCircle.posIniX = testCircle.posX = initialPosX - 20;
-    testCircle.posIniY = testCircle.posY = initialPosY - 20;
+    iconeCursor.posIniX = iconeCursor.posX = initialPosX - 20;
+    iconeCursor.posIniY = iconeCursor.posY = initialPosY - 20;
     route = route + 1;
-
-    contexto.beginPath();
-    contexto.moveTo(0, 0);
-    contexto.lineTo(600, 400);
-    contexto.stroke(); //draw path
-
     // cancelAnimationFrame(animation);
-
-    breakMeme();
-
+    // breakMeme();
     return;
   }
 
-  if (testCircle.atualiza(rota[visit].x, rota[visit].y)) {
-    // console.log('rota:', rota[visit].x, rota[visit].y);
-    // console.log('mudança:', testCircle.posX, testCircle.posY);
-    testCircle.desenha();
+  if (iconeCursor.atualiza(rota[visit].x, rota[visit].y)) {
+    iconeCursor.desenha();
   }
   else {
     visit = visit + 1;
   }
 }
 
+// Array de cidades para o percurso no canvas
 var cidades_canvas = {
   indigoPlateau: {
     x:192,
@@ -616,10 +607,11 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
 // ----------------------------------------------- FIM DO ALGORITMO -------------------------------------------------- //
 
+// Variáveis globais App
+
 let frames = 0;
 let visit = 0;
 let route = 0;
-let animation = null;
 let tmpRoutes = [];
 
 console.log('Iniciando App');
@@ -632,10 +624,12 @@ tmpRoutes = [...tempSet]
 
 //transformar arrayTemp em um conjunto de coordenadas
 //pega as coordenadas do primeiro, depois os vizinhos de todos os outros
-let actual_city = null
-let arrayTeste2 = []
-let initialPosX = 0
-let initialPosY = 0
+
+let actual_city = null;
+let arrayTeste2 = [];
+let initialPosX = 0;
+let initialPosY = 0;
+
 for (let index = 0; index < arrayTemp.length-1; index++) {
   if(index == 0){
     initialPosX = cidades_canvas[arrayTemp[index]].x
@@ -656,75 +650,30 @@ for (let index = 0; index < arrayTemp.length-1; index++) {
      
   }
 }
-testCircle.posIniX = initialPosX - 20
-testCircle.posIniY = initialPosY - 20
-testCircle.posX = initialPosX - 20
-testCircle.posY = initialPosY - 20
 
-let arraySupremo = [
-  // [
-  //   {
-  //     x:0,
-  //     y:280,
-  //   },
-  //   {
-  //     x:110,
-  //     y:0,
-  //   },
-  //   {
-  //     x: 0,
-  //     y: -220,
-  //   }
-  // ],
-  // [
-  //   {
-  //     x:0,
-  //     y:280,
-  //   },
-  //   {
-  //     x:110,
-  //     y:0,
-  //   },
-  //   {
-  //     x: 0,
-  //     y: 170,
-  //   }
-  // ]
-]
-arraySupremo.push(arrayTeste2)
+iconeCursor.posIniX = initialPosX - 20
+iconeCursor.posIniY = initialPosY - 20
+iconeCursor.posX = initialPosX - 20
+iconeCursor.posY = initialPosY - 20
+
+let todasRotas = [];
+todasRotas.push(arrayTeste2);
+
+let meme = null;
 
 function loop() {
   // console.log(route)
-  if (route >= arraySupremo.length) {
+  if (route >= todasRotas.length) {
+    console.log('Todas as rotas já foram demonstradas');
+    cancelAnimationFrame(meme);
     route = 0;
+    return;
   }
   planoDeFundo.desenha();
-  segueRota(arraySupremo[route]);
+  segueRota(todasRotas[route]);
   frames = frames + 1;
   // console.log('Frame: ', frames);
-  animation = requestAnimationFrame(loop);
+  meme = requestAnimationFrame(loop);
 }
-
-// arrayTeste =[
-// {
-//   x:0,
-//   y:280,
-// },
-// {
-//   x:110,
-//   y:0,
-// },
-// {
-//   x: 0,
-//   y: -220,
-// }]
-
-// function loop() {
-//   planoDeFundo.desenha();
-//   segueRota(arrayTeste);
-//   frames = frames + 1;
-//   // console.log('Frame: ', frames);
-//   requestAnimationFrame(loop);
-// }
 
 background.onload = loop();
