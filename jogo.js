@@ -146,142 +146,334 @@ var cidades_canvas = {
   },
   pewter: {
     x: 303,
-    y: 579,
+    y: 359,
     vizinhos: [{
       cidade: 'viridian',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 220,
+      }]
     },
     {
       cidade: 'cerulean',
-      rota: []
+      rota: [
+      {
+        x: 222,
+        y: 0,
+      },
+      {
+        x:0,
+        y:-60,
+      },
+      {
+        x:336,
+        y:0,
+      }]
     }]
   },
   cerulean: {
-    x: 303,
-    y: 579,
+    x: 855,
+    y: 301,
     vizinhos: [{
       cidade: 'pewter',
-      rota: []
+      rota: [{
+        x:-336,
+        y:0,
+      },
+      {
+        x:0,
+        y:60,
+      },
+      {
+        x:-222,
+        y:0,
+      }]
     },
     {
       cidade: 'lavender',
-      rota: []
+      rota: [{
+        x: 225,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 164,
+      }]
     },
     {
       cidade: 'saffron',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 168,
+      }]
     }]
   },
   saffron: {
-    x: 303,
-    y: 579,
+    x: 856,
+    y: 470,
     vizinhos: [{
       cidade: 'cerulean',
-      rota: []
+      rota: [{
+        x: 0,
+        y: -168,
+      }]
     },
     {
       cidade: 'lavender',
-      rota: []
+      rota: [{
+        x: 222,
+        y: 0,
+      }]
     },
     {
       cidade: 'celadon',
-      rota: []
+      rota: [{
+        x: -167,
+        y: 0,
+      }]
     },
     {
       cidade: 'vermilion',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 166,
+      }]
     }]
   },
   celadon: {
-    x: 303,
-    y: 579,
+    x: 690,
+    y: 470,
     vizinhos: [{
       cidade: 'saffron',
-      rota: []
+      rota: [{
+        x: 167,
+        y: 0,
+      }]
     },
     {
       cidade: 'fuchsia',
-      rota: []
+      rota: [{
+        x: -224,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 331,
+      },
+      {
+        x: 280,
+        y: 0,
+      }]
     }]
   },
   vermilion: {
-    x: 303,
-    y: 579,
+    x: 857,
+    y: 636,
     vizinhos: [{
       cidade: 'saffron',
-      rota: []
+      rota: [{
+        x: 0,
+        y: -166,
+      }]
     },
     {
       cidade: 'lavender',
-      rota: []
+      rota: [{
+        x: 221,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -172,
+      }]
     },
     {
       cidade: 'fuchsia',
-      rota: []
+      rota: [{
+        x: 221,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 106,
+      },
+      {
+        x: -173,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 60,
+      },
+      {
+        x: -165,
+        y: 0,
+      }]
     }]
   },
   lavender: {
-    x: 303,
-    y: 579,
+    x: 1075,
+    y: 470,
     vizinhos: [{
       cidade: 'cerulean',
-      rota: []
+      rota: [{
+        x: 0,
+        y: -164,
+      },
+      {
+        x: -225,
+        y: 0,
+      }]
     },
     {
       cidade: 'saffron',
-      rota: []
+      rota: [{
+        x: -222,
+        y: 0,
+      }]
     },
     {
       cidade: 'vermilion',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 172,
+      },
+      {
+        x: -221,
+        y: 0,
+      }]
     },
     {
       cidade: 'fuchsia',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 272,
+      },
+      {
+        x: -173,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: 60,
+      },
+      {
+        x: -165,
+        y: 0,
+      }]
     }]
   },
   fuchsia: {
-    x: 303,
-    y: 579,
+    x: 745,
+    y: 803,
     vizinhos: [{
       cidade: 'vermilion',
-      rota: []
+      rota: [{
+        x: 165,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -60,
+      },
+      {
+        x: 173,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -106,
+      },
+      {
+        x: -221,
+        y: 0,
+      }]
     },
     {
       cidade: 'lavender',
-      rota: []
+      rota: [{
+        x: 165,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -60,
+      },
+      {
+        x: 173,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -272,
+      }]
     },
     {
       cidade: 'celadon',
-      rota: []
+      rota: [
+      {
+        x: -280,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -331,
+      },
+      {
+        x: 224,
+        y: 0,
+      }]
     },
     {
       cidade: 'cinnabar',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 112,
+      },
+      {
+        x: -445,
+        y: 0,
+      }]
     }]
   },
   cinnabar: {
-    x: 303,
-    y: 579,
+    x: 301,
+    y: 913,
     vizinhos: [{
       cidade: 'fuchsia',
-      rota: []
+      rota: [{
+        x: 445,
+        y: 0,
+      },
+      {
+        x: 0,
+        y: -112,
+      }]
     },
     {
       cidade: 'pallet',
-      rota: []
+      rota: [{
+        x: 0,
+        y: -177,
+      }]
     }]
   },
   pallet: {
     x: 303,
-    y: 579,
+    y: 747,
     vizinhos: [{
       cidade: 'cinnabar',
-      rota: []
+      rota: [{
+        x: 0,
+        y: 177,
+      }]
     },
     {
       cidade: 'viridian',
-      rota: []
+      rota: [{
+        x: 0,
+        y: -170,
+      }]
     }]
   },
 }
