@@ -36,7 +36,7 @@ const testCircle = {
   posIniX:192,
   posIniY:303,
 
-  atualiza (newX, newY) { // TODO saltos de X em X, se o salto for passar do valor desejado, ele só chega nele e pronto :)
+  atualiza (newX, newY) {
     const intervaloDeFrames = 1;
     const salto = 7;
     
@@ -124,6 +124,48 @@ function segueRota (rota) {
     visit = visit + 1;
   }
 }
+
+// * button press e seguerota usando botão!
+// function buttonPress() {
+//   segueRota(cidades_canvas.indigoPlateau.vizinhos[0]) //TODO buscar por cidade a ser visitada
+// }
+
+// function segueRota(destino){//usando método mais simpels de simplesmente aparecer no lugar correto cum uuma marcação e fodase
+
+//   // * coloca o quadrado no lugar certo
+//   testCircle.posX = destino.posicao.x
+//   testCircle.posY = destino.posicao.y
+
+//   // * desenha o traço representando o caminho
+//   pathLine.path.push()
+//   // contexto.fillStyle="yellow"
+//   // contexto.beginPath()
+//   // contexto.moveTo(pathLine.lineX,pathLine.lineY)
+//   // destino.rota.forEach(element => {
+//   //   contexto.lineTo(pathLine.lineX + element.x ,pathLine.lineY + element.y )
+//   //   pathLine.lineX += element.x
+//   //   pathLine.lineY += element.y
+//   // });
+//   // contexto.stroke()
+
+//   // requestAnimationFrame(()=>{
+//   //   segueRota(rota)
+//   // })
+// }
+
+
+// function loop() {
+//   planoDeFundo.desenha();
+//   testCircle.desenha();
+//   // cabesaObj.desenha();
+//   pathLine.desenha();
+
+//   // console.log('seguindo o caminho para viridian')
+//   // console.log(testCircle.posY,cidades_canvas.indigoPlateau.vizinhos[0].rota[0].y)
+
+  
+//   requestAnimationFrame(loop);
+// }
 
 var cidades_canvas = {
   indigoPlateau: {
