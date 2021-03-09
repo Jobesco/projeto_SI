@@ -36,7 +36,7 @@ const testCircle = {
   posIniX:192,
   posIniY:303,
 
-  atualiza (newX, newY) {
+  atualiza (newX, newY) { // TODO saltos de X em X, se o salto for passar do valor desejado, ele só chega nele e pronto :)
     const intervaloDeFrames = 1;
     const salto = 1;
 
@@ -72,8 +72,10 @@ const testCircle = {
     }
   },
   desenha() {
-    contexto.fillStyle='red';
-    contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho);
+    // contexto.fillStyle='red';
+    // contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho);
+    contexto.drawImage(cabesa,0,0,517,481,this.posX,this.posY,50,46.51)
+    //ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 }
 
@@ -82,8 +84,8 @@ function segueRota (rota) {
   if (rota[visit] == null) {
     // console.log('Acabou');
     visit = 0;
-    testCircle.posIniX = testCircle.posX = initialPosX;
-    testCircle.posIniY = testCircle.posY = initialPosY;
+    testCircle.posIniX = testCircle.posX = initialPosX - 20;
+    testCircle.posIniY = testCircle.posY = initialPosY - 20;
     route = route + 1;
     // cancelAnimationFrame(animation);
     return;
@@ -630,10 +632,10 @@ for (let index = 0; index < arrayTemp.length-1; index++) {
      
   }
 }
-testCircle.posIniX = initialPosX
-testCircle.posIniY = initialPosY
-testCircle.posX = initialPosX
-testCircle.posY = initialPosY
+testCircle.posIniX = initialPosX - 20
+testCircle.posIniY = initialPosY - 20
+testCircle.posX = initialPosX - 20
+testCircle.posY = initialPosY - 20
 
 let arraySupremo = [
   // [
