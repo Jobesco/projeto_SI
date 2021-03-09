@@ -38,16 +38,23 @@ const testCircle = {
 
   atualiza (newX, newY) { // TODO saltos de X em X, se o salto for passar do valor desejado, ele só chega nele e pronto :)
     const intervaloDeFrames = 1;
-    const salto = 1;
-
+    const salto = 7;
+    
     if(frames % intervaloDeFrames == 0) {
-      // console.log('Hora de atualizar');
-      if (newX === 0) {
+      if (newX == 0) {
         if (newY + this.posIniY > this.posY) {
+          if ((this.posY + salto) > (newY + this.posIniY)) {
+            this.posY = newY + this.posIniY;
+            return true;
+          }
           this.posY = this.posY + salto;
           return true;
         }
         else if (newY + this.posIniY < this.posY) {
+          if ((this.posY - salto) < (newY + this.posIniY)) {
+            this.posY = newY + this.posIniY;
+            return true;
+          }
           this.posY = this.posY - salto;
           return true;
         }
@@ -55,12 +62,20 @@ const testCircle = {
           this.posIniY = this.posY;
         }
       }
-      if (newY === 0) {
+      if (newY == 0) {
         if (newX + this.posIniX > this.posX) {
+          if ((this.posX + salto) > (newX + this.posIniX)) {
+            this.posX = newX + this.posIniX;
+            return true;
+          }
           this.posX = this.posX + salto;
           return true;
         }
         else if (newX + this.posIniX < this.posX) {
+          if ((this.posX - salto) < (newX + this.posIniX)) {
+            this.posX = newX + this.posIniX;
+            return true;
+          }
           this.posX = this.posX - salto;
           return true;
         }
@@ -87,7 +102,16 @@ function segueRota (rota) {
     testCircle.posIniX = testCircle.posX = initialPosX - 20;
     testCircle.posIniY = testCircle.posY = initialPosY - 20;
     route = route + 1;
+
+    contexto.beginPath();
+    contexto.moveTo(0, 0);
+    contexto.lineTo(600, 400);
+    contexto.stroke(); //draw path
+
     // cancelAnimationFrame(animation);
+
+    breakMeme();
+
     return;
   }
 
@@ -137,7 +161,7 @@ var cidades_canvas = {
       cidade: 'pewter',
       rota: [{
         x: 0,
-        y: -220,
+        y: -221,
       }]
     },
     {
@@ -167,7 +191,7 @@ var cidades_canvas = {
       },
       {
         x:0,
-        y:-60,
+        y:-56,
       },
       {
         x:336,
@@ -181,7 +205,7 @@ var cidades_canvas = {
     vizinhos: [{
       cidade: 'pewter',
       rota: [{
-        x:-336,
+        x:-338,
         y:0,
       },
       {
@@ -196,12 +220,12 @@ var cidades_canvas = {
     {
       cidade: 'lavender',
       rota: [{
-        x: 210,
+        x: 218,
         y: 0,
       },
       {
         x: 0,
-        y: 164,
+        y: 170,
       }]
     },
     {
@@ -351,18 +375,18 @@ var cidades_canvas = {
       cidade: 'fuchsia',
       rota: [{
         x: 0,
-        y: 272,
+        y: 274,
       },
       {
-        x: -173,
+        x: -166,
         y: 0,
       },
       {
         x: 0,
-        y: 60,
+        y: 56,
       },
       {
-        x: -165,
+        x: -162,
         y: 0,
       }]
     }]
@@ -463,7 +487,7 @@ var cidades_canvas = {
     }]
   },
   pallet: {
-    x: 303,
+    x: 299,
     y: 747,
     vizinhos: [{
       cidade: 'cinnabar',
