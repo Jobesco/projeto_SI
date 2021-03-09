@@ -9,7 +9,6 @@ const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 // TALVEZ o fato do canvas ter um tamanho variável pode dar merda, qlqr coisa a gt deixa dimensões específicas
 
-
 // [Plano de Fundo]
 const planoDeFundo = {
   sX: 0,
@@ -23,108 +22,91 @@ const planoDeFundo = {
   dHeight: background.height,
 
   desenha() {
-    // console.log(background.width,background.height,'aaa')
     contexto.drawImage(
       background,
       planoDeFundo.sX, planoDeFundo.sY,
       planoDeFundo.sWidth, planoDeFundo.sHeight, 
-      
-      // planoDeFundo.dX, planoDeFundo.dX, 
-      // planoDeFundo.dWidth, planoDeFundo.dHeight,
     );
   },
 };
 
-// const cabesaObj = {
-//   spriteX: 0,
-//   spriteY: 0,
-//   largura: 33,
-//   altura: 24,
-//   x: 10,
-//   y: 50,
-//   desenha() {
-//     contexto.drawImage(
-//       sprites,
-//       flappyBird.spriteX, flappyBird.spriteY, // Sprite X, Sprite Y
-//       flappyBird.largura, flappyBird.altura, // Tamanho do recorte na sprite
-//       flappyBird.x, flappyBird.y,
-//       flappyBird.largura, flappyBird.altura,
-//     );
-//   }
-// }
-
-var testCircle = {
+const testCircle = {
   posX: 155,
   posY: 260,
-  tamanho: 75,
+  tamanho: 30,
   posIniX:155,
   posIniY:260,
 
-  desenha(){
-    contexto.fillStyle='yellow'
-    contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho)
-  },
+  atualiza (newX, newY) {
+    const intervaloDeFrames = 1;
+    const salto = 1;
 
-}
-
-function segueRota(rota){ //rota -> cidade vizinha para qual ele vai andar
-  rota.forEach(element => {
-    let done = false
-    while(!done){
-      let runX = (element.x != 0 ? true : false)
-
-      if(runX){
-        if(testCircle.posX < testCircle.posIniX + element.x){
-          testCircle.posX += 1
+    if(frames % intervaloDeFrames === 0) {
+      console.log('Hora de atualizar');
+      if (newX === 0) {
+        if (newY + this.posIniY > this.posY) {
+          this.posY = this.posY + salto;
+          return true;
         }
-        else if(testCircle.posX > testCircle.posIniX + element.x){
-          testCircle.posX -= 1
+        else if (newY + this.posIniY < this.posY) {
+          this.posY = this.posY - salto;
+          return true;
         }
-        else{
-          done = true
-          testCircle.posIniX = testCircle.posX
+        else {
+          this.posIniY = this.posY;
         }
       }
-      else if(!runX){
-        if(testCircle.posY < testCircle.posIniY + element.y){
-          testCircle.posY += 1
+      if (newY === 0) {
+        if (newX + this.posIniX > this.posX) {
+          this.posX = this.posX + salto;
+          return true;
         }
-        else if(testCircle.posY > testCircle.posIniY + element.y){
-          testCircle.posY -= 1
+        else if (newX + this.posIniX < this.posX) {
+          this.posX = this.posX - salto;
+          return true;
         }
-        else{
-          done = true
-          testCircle.posIniY = testCircle.posY
-
+        else {
+          this.posIniX = this.posX;
         }
       }
-
-      testCircle.desenha()
+      return false;
     }
-    
-  });
-  
-
-  // console.log('testCircle.posY',testCircle.posY,'\ntestCircle.posIniY + rota[0].y',testCircle.posIniY + rota[0].y)
-
-  // if((runX && testCircle.posX == testCircle.posX + rota[0].x) || (!runX && testCircle.posY == testCircle.posY + rota[0].y)) console.log('TEMRINOAUOAUAUAOUA')
-  
+  },
+  desenha() {
+    contexto.fillStyle='red';
+    contexto.fillRect(this.posX,this.posY,this.tamanho,this.tamanho);
+  }
 }
+
+function segueRota (rota) {
+  let i;
+
+  if (rota[visit] == null) {
+    console.log('Acabou');
+    visit = 0;
+    testCircle.posIniX = testCircle.posX = 155;
+    testCircle.posIniY = testCircle.posY = 260;
+    return;
+  }
+
+  if (testCircle.atualiza(rota[visit].x, rota[visit].y)) {
+    console.log('rota:', rota[visit].x, rota[visit].y);
+    console.log('mudança:', testCircle.posX, testCircle.posY);
+    testCircle.desenha();
+  }
+  else {
+    visit = visit + 1;
+  }
+}
+
+let frames = 0;
+let visit = 0;
 
 function loop() {
   planoDeFundo.desenha();
-  testCircle.desenha();
-  // cabesaObj.desenha();
-  // flappyBird.desenha();
-  // setInterval(function() {
-  //   flappyBird.y = flappyBird.y + 1;
-  // },400)
-
-  // console.log('seguindo o caminho para viridian')
-  // console.log(testCircle.posY,cidades_canvas.indigoPlateau.vizinhos[0].rota[0].y)
-  segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota)
-
-  
+  segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota);
+  frames = frames + 1;
+  console.log('Frame: ', frames);
   requestAnimationFrame(loop);
 }
 
@@ -173,11 +155,23 @@ var cidades_grafos = {
 
 var cidades_canvas = {
   indigoPlateau: {
-    posicao_tamanho: {x:30,y:50,radius:100}, //(x,y,raio)
+    posicao_tamanho: {
+      x:30,
+      y:50,
+      radius:100
+    }, //(x,y,raio)
     vizinhos: [
       {
         cidade: 'viridian',
-        rota: [{x:0,y:280},{x:110,y:0}]
+        rota: [
+        {
+          x:0,
+          y:280,
+        },
+        {
+          x:110,
+          y:0,
+        }]
       } //(x,y)
     ]
   }
