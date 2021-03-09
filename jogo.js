@@ -29,11 +29,11 @@ const planoDeFundo = {
 };
 
 const testCircle = {
-  posX: 155,
-  posY: 260,
+  posX: 192,
+  posY: 303,
   tamanho: 30,
-  posIniX:155,
-  posIniY:260,
+  posIniX:192,
+  posIniY:303,
 
   atualiza (newX, newY) {
     const intervaloDeFrames = 1;
@@ -97,36 +97,193 @@ function segueRota (rota) {
   }
 }
 
-function loop() {
-  planoDeFundo.desenha();
-  segueRota(cidades_canvas.indigoPlateau.vizinhos[0].rota);
-  frames = frames + 1;
-  // console.log('Frame: ', frames);
-  requestAnimationFrame(loop);
-}
-
 var cidades_canvas = {
   indigoPlateau: {
-    posicao_tamanho: {
-      x:30,
-      y:50,
-      radius:100
-    },
-    vizinhos: [
+    x:192,
+    y:303,
+    vizinhos: [{
+      cidade: 'viridian',
+      rota: [
       {
-        cidade: 'viridian',
-        rota: [
-        {
-          x:0,
-          y:280,
-        },
-        {
-          x:110,
-          y:0,
-        }]
-      } //(x,y)
-    ]
-  }
+        x:0,
+        y:280,
+      },
+      {
+        x:110,
+        y:0,
+      }]
+    }]
+  },
+  viridian: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'indigoPlateau',
+      rota: [
+      {
+        x:-110,
+        y:0,
+      },
+      {
+        x:0,
+        y:-280,
+      }]
+    },
+    {
+      cidade: 'pewter',
+      rota: [{
+        x: 0,
+        y: -220,
+      }]
+    },
+    {
+      cidade: 'pallet',
+      rota: [{
+        x: 0,
+        y: 170,
+      }]
+    }]
+  },
+  pewter: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'viridian',
+      rota: []
+    },
+    {
+      cidade: 'cerulean',
+      rota: []
+    }]
+  },
+  cerulean: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'pewter',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'saffron',
+      rota: []
+    }]
+  },
+  saffron: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'cerulean',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'celadon',
+      rota: []
+    },
+    {
+      cidade: 'vermilion',
+      rota: []
+    }]
+  },
+  celadon: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  vermilion: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  lavender: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'cerulean',
+      rota: []
+    },
+    {
+      cidade: 'saffron',
+      rota: []
+    },
+    {
+      cidade: 'vermilion',
+      rota: []
+    },
+    {
+      cidade: 'fuchsia',
+      rota: []
+    }]
+  },
+  fuchsia: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'vermilion',
+      rota: []
+    },
+    {
+      cidade: 'lavender',
+      rota: []
+    },
+    {
+      cidade: 'celadon',
+      rota: []
+    },
+    {
+      cidade: 'cinnabar',
+      rota: []
+    }]
+  },
+  cinnabar: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'fuchsia',
+      rota: []
+    },
+    {
+      cidade: 'pallet',
+      rota: []
+    }]
+  },
+  pallet: {
+    x: 303,
+    y: 579,
+    vizinhos: [{
+      cidade: 'cinnabar',
+      rota: []
+    },
+    {
+      cidade: 'viridian',
+      rota: []
+    }]
+  },
 }
 
 // ----------------------------------------------- INICIO DO ALGORITMO ------------------------------------------ //
@@ -243,5 +400,27 @@ let visit = 0;
 
 console.log('Iniciando App');
 console.log('Caminho mais curto', encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+
+arrayTeste =[
+{
+  x:0,
+  y:280,
+},
+{
+  x:110,
+  y:0,
+},
+{
+  x: 0,
+  y: -220,
+}]
+
+function loop() {
+  planoDeFundo.desenha();
+  segueRota(arrayTeste);
+  frames = frames + 1;
+  // console.log('Frame: ', frames);
+  requestAnimationFrame(loop);
+}
 
 background.onload = loop();
