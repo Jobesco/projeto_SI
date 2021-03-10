@@ -9,39 +9,39 @@
     <canvas id="game-canvas" width="1770" height="996"></canvas>
 
     <div id="form_dijkstra"> 
-      <label for="origin_city">Cidade origem</label>
-      <select name="origin_city" id="origin_city">
-        <option value="indigoPlateau">Indigo Plateau</option>
-        <option value="viridian">Viridian</option>
-        <option value="pewter">Pewter</option>
-        <option value="cerulean">Cerulean</option>
-        <option value="saffron">Saffron</option>
-        <option value="celadon">Celadon</option>
-        <option value="vermilion">Vermillion</option>
-        <option value="lavender">Lavender</option>
-        <option value="fuchsia">Fuchsia</option>
-        <option value="cinnabar">Cinnabar</option>
-        <option value="pallet">Pallet</option>
+      <select name="origin_city" id="origin_city" class="selector">
+        <option value="cidOrigem" class="selection">Cidade Origem</option>
+        <option value="indigoPlateau" class="selection">Indigo Plateau</option>
+        <option value="viridian" class="selection">Viridian</option>
+        <option value="pewter" class="selection">Pewter</option>
+        <option value="cerulean" class="selection">Cerulean</option>
+        <option value="saffron" class="selection">Saffron</option>
+        <option value="celadon" class="selection">Celadon</option>
+        <option value="vermilion" class="selection">Vermillion</option>
+        <option value="lavender" class="selection">Lavender</option>
+        <option value="fuchsia" class="selection">Fuchsia</option>
+        <option value="cinnabar" class="selection">Cinnabar</option>
+        <option value="pallet" class="selection">Pallet</option>
       </select>
       </br>
 
-      <label for="destination_city">Cidade destino</label>
-      <select name="destination_city" id="destination_city">
-        <option value="indigoPlateau">Indigo Plateau</option>
-        <option value="viridian">Viridian</option>
-        <option value="pewter">Pewter</option>
-        <option value="cerulean">Cerulean</option>
-        <option value="saffron">Saffron</option>
-        <option value="celadon">Celadon</option>
-        <option value="vermilion">Vermillion</option>
-        <option value="lavender">Lavender</option>
-        <option value="fuchsia">Fuchsia</option>
-        <option value="cinnabar">Cinnabar</option>
-        <option value="pallet">Pallet</option>
+      <select name="destination_city" id="destination_city" class="selector">
+        <option value="cidDestino" class="selection">Cidade Destino</option>
+        <option value="indigoPlateau" class="selection">Indigo Plateau</option>
+        <option value="viridian" class="selection">Viridian</option>
+        <option value="pewter" class="selection">Pewter</option>
+        <option value="cerulean" class="selection">Cerulean</option>
+        <option value="saffron" class="selection">Saffron</option>
+        <option value="celadon" class="selection">Celadon</option>
+        <option value="vermilion" class="selection">Vermillion</option>
+        <option value="lavender" class="selection">Lavender</option>
+        <option value="fuchsia" class="selection">Fuchsia</option>
+        <option value="cinnabar" class="selection">Cinnabar</option>
+        <option value="pallet" class="selection">Pallet</option>
       </select>
       </br>
 
-      <input type="submit" value="Go" onclick="buttonPress()">
+      <input type="submit" value="Go" onclick="buttonPress()" id="go-button">
     </div>
     <style>
         body {
@@ -63,8 +63,23 @@
         }
         #form_dijkstra{
           position: absolute;
-          left: 1500px;
+          left: 1350px;
           top: 200px;
+          display: flex;
+          flex-direction: column;
+        }
+        .selector {
+          border: 5px solid rgba(235, 64, 52, 1);
+          width: 400px;
+          height: 100px;
+          padding: 10px 15px;
+          font-size: 3em;
+        }
+        .selection {
+          font-size: .5em !important;
+        }
+        #go-button {
+          margin: 0 auto;
         }
     </style>
 

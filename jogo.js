@@ -121,7 +121,8 @@ function buttonPress() {
   let origin = document.getElementById("origin_city").value
   let destination = document.getElementById("destination_city").value
 
-  if(origin != destination && !rodar_rotas){ // ? impede de jogar uma nova rota do nada
+  if(origin == 'cidOrigem' || destination == 'cidDestino') alert('Escolha uma cidade')
+  else if(origin != destination && !rodar_rotas){ // ? impede de jogar uma nova rota do nada
     rodar_rotas = true
 
     //encontraCaminhoMaisCurto zera automaticamente :)
