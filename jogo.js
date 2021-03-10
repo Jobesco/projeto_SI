@@ -574,7 +574,7 @@ let nohMaisPerto = (distancias, visitados) => {
 };
 
 let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
-
+  tmpRoutes = [] // ? reset tmpRoutes
 
   let distancias = {};
   distancias[nohFim] = "Infinity";
@@ -616,8 +616,8 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
                       caminhoMaisCurtoAux.push(paiAux);
                       paiAux = pais[paiAux];
                   }
-                  console.log('Caminho Temporário:', caminhoMaisCurtoAux.reverse());
-                  tmpRoutes.push(caminhoMaisCurtoAux);
+                  // console.log('Caminho Temporário:', caminhoMaisCurtoAux.reverse());
+                  tmpRoutes.push(caminhoMaisCurtoAux.reverse());
               }
           }
       }
@@ -649,6 +649,50 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
 // ----------------------------------------------- FIM DO ALGORITMO -------------------------------------------------- //
 
+// ? recebe um array de rotas (array com nomes de cidades)
+// ? e transforma em um array em que cada índice é um array de movimentos,
+// ? um array de movimentos pra cada rota
+function route_to_moves(array_cidades) {
+  let arrayRotas = []; //array com a rota atual
+  let returnArray = []
+
+  for (let i = 0; i < array_cidades.length; i++) {
+    arrayRotas = []
+    let arrTemp = array_cidades[i]; //arrTemp = rota atual p converter
+    // console.log('arrTemp:',arrTemp)
+
+    for (let index = 0; index < arrTemp.length-1; index++) {
+      if(index == 0){
+        initialPosX = cidades_canvas[arrTemp[index]].x
+        initialPosY = cidades_canvas[arrTemp[index]].y
+      }
+      if(index+1 != arrTemp.length){
+        // console.log('agora estou em',arrTemp[index],'preciso achar a rota de',arrTemp[index+1])
+        // console.log(arrTemp[index])
+    
+        // * procura no array de vizinhos o que tem cidade igual a ele
+        let cidade = cidades_canvas[arrTemp[index]].vizinhos.find(elem2 => {
+          return elem2.cidade === arrTemp[index+1]
+        })
+        // console.log('achei a cidade vizinha',cidade.rota)
+        cidade.rota.forEach(element => {
+          arrayRotas.push(element)  
+        });
+      }
+    }
+    // console.log('arrayRotas:',arrayRotas)
+    returnArray.push(arrayRotas)
+  }
+  iconeCursor.posIniX = initialPosX - 20
+  iconeCursor.posIniY = initialPosY - 20
+  iconeCursor.posX = initialPosX - 20
+  iconeCursor.posY = initialPosY - 20
+
+  console.log('returnArray:',returnArray)
+  return returnArray
+}
+
+
 // Variáveis globais App
 
 let frames = 0;
@@ -658,52 +702,19 @@ let tmpRoutes = [];
 
 console.log('Iniciando App');
 let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
-console.log('Caminho mais curto', arrayTemp);
-console.log('Temp:', tmpRoutes);
-const tempSet = new Set(tmpRoutes)
-tmpRoutes = [...tempSet]
-//TODO verificar igualdade das rotas temporárias, infelizmente minha net caiu e eu não pude fazer mais nada realmente significante
+tmpRoutes.push(arrayTemp)
+// console.log(tmpRoutes,'rotas antes:')
+// console.log('Caminho mais curto', arrayTemp);
+// console.log('Temp:', tmpRoutes);
 
-//transformar arrayTemp em um conjunto de coordenadas
-//pega as coordenadas do primeiro, depois os vizinhos de todos os outros
-
-let actual_city = null;
-let arrayTeste2 = [];
 let initialPosX = 0;
 let initialPosY = 0;
 
-for (let index = 0; index < arrayTemp.length-1; index++) {
-  if(index == 0){
-    initialPosX = cidades_canvas[arrayTemp[index]].x
-    initialPosY = cidades_canvas[arrayTemp[index]].y
-  }
-  if(index+1 != arrayTemp.length){ //roda código diferente se estiver pra acabar
-    console.log('agora estou em',arrayTemp[index],'preciso achar a rota de',arrayTemp[index+1])
-    // console.log(arrayTemp[index])
-
-    //procura no array de vizinhos o que tem cidade igual a ele
-    let cidade = cidades_canvas[arrayTemp[index]].vizinhos.find(elem2 => {
-      return elem2.cidade === arrayTemp[index+1]
-    })
-    console.log('achei a cidade vizinha',cidade.rota)
-    cidade.rota.forEach(element => {
-      arrayTeste2.push(element)  
-    });
-     
-  }
-}
-
-iconeCursor.posIniX = initialPosX - 20
-iconeCursor.posIniY = initialPosY - 20
-iconeCursor.posX = initialPosX - 20
-iconeCursor.posY = initialPosY - 20
-
-let todasRotas = [];
-todasRotas.push(arrayTeste2);
+let todasRotas = route_to_moves([...tmpRoutes]);
+console.log('todasRotas:',todasRotas)
 
 let meme = null;
 
-//TODO rodar com um botão
 //TODO escolher o inicio e fim
 
 function loop() {
@@ -715,7 +726,7 @@ function loop() {
     return;
   }
   planoDeFundo.desenha();
-  segueRota(todasRotas[route]);
+  segueRota(todasRotas[route]); // TODO condicionar c um button-press
   frames = frames + 1;
   // console.log('Frame: ', frames);
   meme = requestAnimationFrame(loop);
