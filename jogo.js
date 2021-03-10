@@ -96,14 +96,13 @@ const iconeCursor = {
 
 function segueRota (rota) {
 
-  if (rota[visit] == null) {
+  if (rota[visit] == null) { // ? se ele tiver chegado no fim do loop
     // console.log('Acabou');
     visit = 0;
     iconeCursor.posIniX = iconeCursor.posX = initialPosX - 20;
     iconeCursor.posIniY = iconeCursor.posY = initialPosY - 20;
     route = route + 1;
-    // cancelAnimationFrame(animation);
-    // breakMeme();
+    
     return;
   }
 
@@ -116,9 +115,10 @@ function segueRota (rota) {
 }
 
 // * button press e seguerota usando botão!
-// function buttonPress() {
-//   segueRota(cidades_canvas.indigoPlateau.vizinhos[0]) //TODO buscar por cidade a ser visitada
-// }
+function buttonPress() {
+  console.log('apertei o botão!')
+  rodar_rotas = true
+}
 
 // function segueRota(destino){//usando método mais simpels de simplesmente aparecer no lugar correto cum uuma marcação e fodase
 
@@ -688,16 +688,14 @@ function route_to_moves(array_cidades) {
   iconeCursor.posX = initialPosX - 20
   iconeCursor.posY = initialPosY - 20
 
-  console.log('returnArray:',returnArray)
+  // console.log('returnArray:',returnArray)
   return returnArray
 }
 
 
 // Variáveis globais App
 
-let frames = 0;
-let visit = 0;
-let route = 0;
+let frames = 0, visit = 0, route = 0, rodar_rotas = false;
 let tmpRoutes = [];
 
 console.log('Iniciando App');
@@ -711,7 +709,7 @@ let initialPosX = 0;
 let initialPosY = 0;
 
 let todasRotas = route_to_moves([...tmpRoutes]);
-console.log('todasRotas:',todasRotas)
+// console.log('todasRotas:',todasRotas)
 
 let meme = null;
 
@@ -721,14 +719,18 @@ function loop() {
   // console.log(route)
   if (route >= todasRotas.length) {
     console.log('Todas as rotas já foram demonstradas');
-    cancelAnimationFrame(meme);
     route = 0;
-    return;
+    rodar_rotas = false
   }
   planoDeFundo.desenha();
-  segueRota(todasRotas[route]); // TODO condicionar c um button-press
+
+  if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
+    segueRota(todasRotas[route]); 
+  }
+  
+
+
   frames = frames + 1;
-  // console.log('Frame: ', frames);
   meme = requestAnimationFrame(loop);
 }
 
