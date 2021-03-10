@@ -41,7 +41,7 @@
       </select>
       </br>
 
-      <input type="submit" value="Go" onclick="buttonPress()" id="go-button">
+      <input type="submit" value="" onclick="buttonPress()" id="go-button">
     </div>
     <style>
         body {
@@ -63,23 +63,36 @@
         }
         #form_dijkstra{
           position: absolute;
-          left: 1350px;
-          top: 200px;
+          left: 1310px;
+          top: 75px;
           display: flex;
           flex-direction: column;
-        }
-        .selector {
-          border: 5px solid rgba(235, 64, 52, 1);
-          width: 400px;
-          height: 100px;
-          padding: 10px 15px;
-          font-size: 3em;
         }
         .selection {
           font-size: .5em !important;
         }
         #go-button {
-          margin: 0 auto;
+          background: url('Botoes-bg-removed.png') -16px 270px;
+          width: 486px;
+          height: 232px;
+          border: 0px;
+          padding: 0px;
+        }
+        #origin_city {
+          background: url('Botoes-bg-removed.png') -16px -13px;
+          width: 486px;
+          height: 232px;
+          border: 0px;
+          padding: 0px 60px;
+          font-size: 3em;
+        }
+        #destination_city {
+          background: url('Botoes-bg-removed.png') -16px -13px;
+          width: 486px;
+          height: 232px;
+          border: 0px;
+          padding: 0px 60px;
+          font-size: 3em;
         }
     </style>
 

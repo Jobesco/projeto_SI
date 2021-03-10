@@ -94,13 +94,42 @@ const iconeCursor = {
   }
 }
 
-function segueRota (rota) {
+const pathLine = { 
+  posIniX: 0,
+  posIniY: 0,
+  posX: 0,
+  posY: 0,
+
+  desenha(rotas){
+    console.log('posIniX:',pathLine.posIniX,'posIniY:',pathLine.posIniY)
+    rotas.forEach(rota => {
+      contexto.beginPath()
+      contexto.moveTo(pathLine.posIniX + 20,pathLine.posIniY + 20)
+      console.log('indo pra:',pathLine)
+      rota.forEach(element => {
+        contexto.lineTo(pathLine.posX + element.x ,pathLine.posY + element.y )
+        pathLine.posX = pathLine.posIniX + 20 + element.x
+        pathLine.posY = pathLine.posIniY + 20 + element.y
+      });
+      contexto.stroke()  
+    })
+    
+  }
+
+}
+
+function segueRota (rota) { // ? rota -> array de coordenadas a seguir do ponto inicial
+
+  if(visit == 0){
+    pathLine.posIniX = iconeCursor.posIniX
+    pathLine.posIniY = iconeCursor.posIniY
+  }
 
   if (rota[visit] == null) { // ? se ele tiver chegado no fim do loop
     // console.log('Acabou');
     visit = 0;
-    iconeCursor.posIniX = iconeCursor.posX = initialPosX - 20;
-    iconeCursor.posIniY = iconeCursor.posY = initialPosY - 20;
+    iconeCursor.posIniX = iconeCursor.posX = pathLine.posIniX = initialPosX - 20;
+    iconeCursor.posIniY = iconeCursor.posY = pathLine.posIniY = initialPosY - 20;
     route = route + 1;
     
     return;
@@ -135,42 +164,6 @@ function buttonPress() {
   else if(rodar_rotas) alert("Espere o loop acabar!")
   else alert("Selecione cidades diferentes!")
 }
-// function segueRota(destino){//usando método mais simpels de simplesmente aparecer no lugar correto cum uuma marcação e fodase
-
-//   // * coloca o quadrado no lugar certo
-//   testCircle.posX = destino.posicao.x
-//   testCircle.posY = destino.posicao.y
-
-//   // * desenha o traço representando o caminho
-//   pathLine.path.push()
-//   // contexto.fillStyle="yellow"
-//   // contexto.beginPath()
-//   // contexto.moveTo(pathLine.lineX,pathLine.lineY)
-//   // destino.rota.forEach(element => {
-//   //   contexto.lineTo(pathLine.lineX + element.x ,pathLine.lineY + element.y )
-//   //   pathLine.lineX += element.x
-//   //   pathLine.lineY += element.y
-//   // });
-//   // contexto.stroke()
-
-//   // requestAnimationFrame(()=>{
-//   //   segueRota(rota)
-//   // })
-// }
-
-
-// function loop() {
-//   planoDeFundo.desenha();
-//   testCircle.desenha();
-//   // cabesaObj.desenha();
-//   pathLine.desenha();
-
-//   // console.log('seguindo o caminho para viridian')
-//   // console.log(testCircle.posY,cidades_canvas.indigoPlateau.vizinhos[0].rota[0].y)
-
-  
-//   requestAnimationFrame(loop);
-// }
 
 // Array de cidades para o percurso no canvas
 var cidades_canvas = {
@@ -728,8 +721,8 @@ let frames = 0, visit = 0, route = 0, rodar_rotas = false;
 let tmpRoutes = [];
 let initialPosX = 0;
 let initialPosY = 0;
-let arrayTemp = []
-let todasRotas = []
+let arrayTemp = [];
+let todasRotas = [];
 
 console.log('Iniciando App');
 
@@ -758,7 +751,7 @@ function loop() {
   if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
     segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
   }
-  
+  // pathLine.desenha(todasRotas)  //DEBUG
 
 
   frames = frames + 1;
