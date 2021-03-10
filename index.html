@@ -7,7 +7,42 @@
 </head>
 <body>
     <canvas id="game-canvas" width="1770" height="996"></canvas>
-    <button type="button" onclick="buttonPress()" id="button-test">Test path</button>
+
+    <div id="form_dijkstra"> 
+      <label for="origin_city">Cidade origem</label>
+      <select name="origin_city" id="origin_city">
+        <option value="indigoPlateau">Indigo Plateau</option>
+        <option value="viridian">Viridian</option>
+        <option value="pewter">Pewter</option>
+        <option value="cerulean">Cerulean</option>
+        <option value="saffron">Saffron</option>
+        <option value="celadon">Celadon</option>
+        <option value="vermilion">Vermillion</option>
+        <option value="lavender">Lavender</option>
+        <option value="fuchsia">Fuchsia</option>
+        <option value="cinnabar">Cinnabar</option>
+        <option value="pallet">Pallet</option>
+      </select>
+      </br>
+
+      <label for="destination_city">Cidade destino</label>
+      <select name="destination_city" id="destination_city">
+        <option value="indigoPlateau">Indigo Plateau</option>
+        <option value="viridian">Viridian</option>
+        <option value="pewter">Pewter</option>
+        <option value="cerulean">Cerulean</option>
+        <option value="saffron">Saffron</option>
+        <option value="celadon">Celadon</option>
+        <option value="vermilion">Vermillion</option>
+        <option value="lavender">Lavender</option>
+        <option value="fuchsia">Fuchsia</option>
+        <option value="cinnabar">Cinnabar</option>
+        <option value="pallet">Pallet</option>
+      </select>
+      </br>
+
+      <input type="submit" value="Go" onclick="buttonPress()">
+    </div>
     <style>
         body {
           height: 100vh;
@@ -25,6 +60,11 @@
           position: absolute;
           left: 1500px;
           top: 250px;
+        }
+        #form_dijkstra{
+          position: absolute;
+          left: 1500px;
+          top: 200px;
         }
     </style>
 

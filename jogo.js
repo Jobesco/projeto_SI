@@ -114,12 +114,26 @@ function segueRota (rota) {
   }
 }
 
-// * button press e seguerota usando botão!
+// * Ativa quando pressiona o botão
 function buttonPress() {
   console.log('apertei o botão!')
-  rodar_rotas = true
-}
+  
+  let origin = document.getElementById("origin_city").value
+  let destination = document.getElementById("destination_city").value
 
+  if(origin != destination && !rodar_rotas){ // ? impede de jogar uma nova rota do nada
+    rodar_rotas = true
+
+    //encontraCaminhoMaisCurto zera automaticamente :)
+    arrayTemp = encontraCaminhoMaisCurto(grafo, origin, destination).caminho
+    tmpRoutes.push(arrayTemp)
+    todasRotas = route_to_moves([...tmpRoutes]);
+
+    console.log('rotas:',todasRotas)
+  }
+  else if(rodar_rotas) alert("Espere o loop acabar!")
+  else alert("Selecione cidades diferentes!")
+}
 // function segueRota(destino){//usando método mais simpels de simplesmente aparecer no lugar correto cum uuma marcação e fodase
 
 //   // * coloca o quadrado no lugar certo
@@ -697,41 +711,45 @@ function route_to_moves(array_cidades) {
 
 let frames = 0, visit = 0, route = 0, rodar_rotas = false;
 let tmpRoutes = [];
+let initialPosX = 0;
+let initialPosY = 0;
+let arrayTemp = []
+let todasRotas = []
 
 console.log('Iniciando App');
-let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
-tmpRoutes.push(arrayTemp)
+
 // console.log(tmpRoutes,'rotas antes:')
 // console.log('Caminho mais curto', arrayTemp);
 // console.log('Temp:', tmpRoutes);
 
-let initialPosX = 0;
-let initialPosY = 0;
+//initialPos resetam o caminho pro início
 
-let todasRotas = route_to_moves([...tmpRoutes]);
+
+// let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
+// tmpRoutes.push(arrayTemp)
+// let todasRotas = route_to_moves([...tmpRoutes]);
 // console.log('todasRotas:',todasRotas)
 
-let meme = null;
-
-//TODO escolher o inicio e fim
 
 function loop() {
   // console.log(route)
   if (route >= todasRotas.length) {
-    console.log('Todas as rotas já foram demonstradas');
+    // console.log('Todas as rotas já foram demonstradas');
     route = 0;
     rodar_rotas = false
   }
   planoDeFundo.desenha();
 
   if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
-    segueRota(todasRotas[route]); 
+    segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
   }
   
 
 
   frames = frames + 1;
-  meme = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 
 background.onload = loop();
+
+// TODO estilizar melhor o botão
