@@ -553,7 +553,7 @@ var cidades_canvas = {
   },
 }
 
-// ----------------------------------------------- INICIO DO ALGORITMO ------------------------------------------ //
+//-----------------------------------------------INICIO DO ALGORITMO DIJKSTRA------------------------------------------
 
 let grafo = {
   indigoPlateau: {viridian: 30},
@@ -569,26 +569,30 @@ let grafo = {
   pallet: {cinnabar: 35, viridian: 10},
 };
 
+
 let nohMaisPerto = (distancias, visitados) => {
 
   let maisCurto = null;
 
+  let aux = 0;
+
   for (let noh in distancias) {
 
-      let atualMaisCurto =
-      maisCurto === null || distancias[noh] < distancias[maisCurto];
+    let atualMaisCurto =
+    maisCurto === null || distancias[noh] < distancias[maisCurto];
 
 
-      if (atualMaisCurto && !visitados.includes(noh)) {
+    if (atualMaisCurto && !visitados.includes(noh)) {
 
-          maisCurto = noh;
-      }
+      maisCurto = noh;
+    }
   }
   return maisCurto;
 };
 
 let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
-  tmpRoutes = [] // ? reset tmpRoutes
+    
+  tmpRoutes = [];
 
   let distancias = {};
   distancias[nohFim] = "Infinity";
@@ -596,7 +600,7 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
   let pais = { nohFim: null };
   for (let filho in grafo[nohInicio]) {
-      pais[filho] = nohInicio;
+    pais[filho] = nohInicio;
   }
 
 
@@ -604,64 +608,74 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
   let noh = nohMaisPerto(distancias, visitados);
 
-  while (noh) {
+  while (noh && !visitados.includes(nohFim)) {
 
-      let distancia = distancias[noh];
-      let filhos = grafo[noh]; 
+    let distancia = distancias[noh];
+    let filhos = grafo[noh]; 
 
-
-      for (let filho in filhos) {
-
-
-          if (String(filho) === String(nohInicio)) {
-              continue;
-          } else {
-
-              let novaDistancia = distancia + filhos[filho];
-
-              if (!distancias[filho] || distancias[filho] > novaDistancia) {
-
-                  distancias[filho] = novaDistancia;
-
-                  pais[filho] = noh;
-                  let caminhoMaisCurtoAux = [noh];
-                  let paiAux = pais[noh];
-                  while (paiAux) {
-                      caminhoMaisCurtoAux.push(paiAux);
-                      paiAux = pais[paiAux];
-                  }
-                  // console.log('Caminho Temporário:', caminhoMaisCurtoAux.reverse());
-                  tmpRoutes.push(caminhoMaisCurtoAux.reverse());
-              }
-          }
+    if(!(noh === nohFim)) {                  
+      let caminhoMaisCurtoAux = [noh];
+      let paiAux = pais[noh];
+      while (paiAux) {
+        caminhoMaisCurtoAux.push(paiAux);
+        paiAux = pais[paiAux];
       }
 
-      visitados.push(noh);
+      tmpRoutes.push(caminhoMaisCurtoAux.reverse()); //Caminho mais curto até o momento
 
-      noh = nohMaisPerto(distancias, visitados);
+      let resultadoAux = {
+        distancia: distancias[noh],
+        caminho: caminhoMaisCurtoAux,
+      };
+      console.log(resultadoAux);
+    }
+
+    for (let filho in filhos) {
+
+
+      if (String(filho) === String(nohInicio)) {
+        continue;
+      } else {
+
+        let novaDistancia = distancia + filhos[filho];
+
+        if (!distancias[filho] || distancias[filho] > novaDistancia) {
+          
+          distancias[filho] = novaDistancia;
+
+          pais[filho] = noh;
+        }
+      }
+    }
+
+    visitados.push(noh);
+
+
+    noh = nohMaisPerto(distancias, visitados);
   }
 
 
   let caminhoMaisCurto = [nohFim];
   let pai = pais[nohFim];
   while (pai) {
-      caminhoMaisCurto.push(pai);
-      pai = pais[pai];
+    caminhoMaisCurto.push(pai);
+    pai = pais[pai];
   }
-  caminhoMaisCurto.reverse();
+  caminhoMaisCurto.reverse(); //Caminho final mais curto
 
 
   let resultados = {
-      distancia: distancias[nohFim],
-      caminho: caminhoMaisCurto,
+    distancia: distancias[nohFim],
+    caminho: caminhoMaisCurto,
   };
 
   return resultados;
 };
 
-// console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
+//console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
 
-// ----------------------------------------------- FIM DO ALGORITMO -------------------------------------------------- //
+//-----------------------------------------------FIM DO ALGORITMO--------------------------------------------------
+
 
 // ? recebe um array de rotas (array com nomes de cidades)
 // ? e transforma em um array em que cada índice é um array de movimentos,
