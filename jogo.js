@@ -102,18 +102,23 @@ const pathLine = {
 
   desenha(rotas){
     console.log('posIniX:',pathLine.posIniX,'posIniY:',pathLine.posIniY)
-    rotas.forEach(rota => {
-      contexto.beginPath()
-      contexto.moveTo(pathLine.posIniX + 20,pathLine.posIniY + 20)
-      console.log('indo pra:',pathLine)
-      rota.forEach(element => {
-        contexto.lineTo(pathLine.posX + element.x ,pathLine.posY + element.y )
-        pathLine.posX = pathLine.posIniX + 20 + element.x
-        pathLine.posY = pathLine.posIniY + 20 + element.y
-      });
-      contexto.stroke()  
-    })
-    
+    // rotas.forEach(rota => {
+    //   contexto.beginPath()
+    //   contexto.moveTo(pathLine.posIniX + 20,pathLine.posIniY + 20)
+    //   console.log('indo pra:',pathLine)
+    //   rota.forEach(element => {
+    //     contexto.lineTo(pathLine.posX + element.x ,pathLine.posY + element.y )
+    //     pathLine.posX = pathLine.posIniX + 20 + element.x
+    //     pathLine.posY = pathLine.posIniY + 20 + element.y
+    //   });
+    //   contexto.stroke()
+    // })
+    contexto.beginPath()
+    contexto.moveTo(192,303) //COORDENADAS
+    // contexto.lineTo(iconeCursor.posX + 20,iconeCursor.posY + 20) // ? assim ele segue o boneco, mas não obedece o caminho
+    // contexto.lineTo(192,303 + 280) //COORDENADAS
+    // contexto.lineTo(192 + 110,303 + 280)
+    contexto.stroke()
   }
 
 }
@@ -750,9 +755,8 @@ function loop() {
 
   if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
     segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
+    pathLine.desenha(todasRotas)  //DEBUG
   }
-  // pathLine.desenha(todasRotas)  //DEBUG
-
 
   frames = frames + 1;
   requestAnimationFrame(loop);
