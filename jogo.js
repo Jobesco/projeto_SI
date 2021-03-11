@@ -563,8 +563,8 @@ let grafo = {
   celadon: {saffron: 10, fuchsia: 45},
   vermilion: {saffron: 10, lavender: 15, fuchsia: 20},
   lavender: {cerulean: 15, saffron: 10, vermilion: 15, fuchsia: 20},
-  fuchsia: {vermilion: 20, lavender: 20, celadon: 45, cinnabar: 50},
-  cinnabar: {fuchsia: 50, pallet: 35},
+  fuchsia: {vermilion: 20, lavender: 20, celadon: 45, cinnabar: 80},
+  cinnabar: {fuchsia: 80, pallet: 35},
   pallet: {cinnabar: 35, viridian: 10},
 };
 
@@ -673,7 +673,164 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
 
 //console.log(encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia"));
 
-//-----------------------------------------------FIM DO ALGORITMO--------------------------------------------------
+//-----------------------------------------------FIM DO ALGORITMO DIJKSTRA--------------------------------------------------
+
+//-----------------------------------------------INICIO DO ALGORITMO A*--------------------------------------------
+
+let heuristicaA = {
+  indigoPlateau: -1,
+  viridian: -1,
+  pewter: -1,
+  cerulean: -1,
+  saffron: -1,
+  celadon: -1,
+  vermilion: -1,
+  lavender: -1,
+  fuchsia: -1,
+  cinnabar: -1,
+  pallet: -1,
+}
+
+let atualizarDistancias = (cidadeDestino) =>{
+  for (let cidade in heuristicaA){
+      if (cidade == cidadeDestino){
+          heuristicaA[cidade] = 0;
+      }else{
+          heuristicaA[cidade] = distanciaEntreDoisPontos(cidade, cidadeDestino);
+      }
+  }
+}
+
+let distanciaEntreDoisPontos = (cidadeAtual, cidadeDestino)  => {
+  var res = Math.sqrt(Math.pow((cidades_canvas[cidadeDestino].x - cidades_canvas[cidadeAtual].x), 2) + Math.pow((cidades_canvas[cidadeDestino].y - cidades_canvas[cidadeAtual].y), 2));
+  return res/10;
+};
+
+console.log(distanciaEntreDoisPontos("cinnabar","fuchsia"));
+
+let nohMaisPertoA = (distanciasA, visitados) => {
+
+  let maisCurto = null;
+
+  for (let noh in distanciasA) {
+      let atualMaisCurto =
+      (maisCurto === null || distanciasA[noh] < distanciasA[maisCurto]) ;
+
+      if (atualMaisCurto && !visitados.includes(noh)) {
+
+          maisCurto = noh;
+      }
+  }
+  return maisCurto;
+};
+
+let encontraCaminhoMaisCurtoA = (grafo, nohInicio, nohFim) => {
+  //tmpRoutes = [];
+  atualizarDistancias(nohFim);
+
+  let somaDistanciaHeuristica = {};
+
+  for(let node in somaDistanciaHeuristica) {
+      delete somaDistanciaHeuristica[node];
+  }
+  for(let node in grafo[nohInicio]) {
+      
+      if(node != nohInicio) {
+
+          somaDistanciaHeuristica[node] = heuristicaA[node];
+      }
+  }
+
+
+  let pais = {};
+  for(let node in pais) {
+      delete pais[node];
+  }
+  pais = { nohFim: null };
+  for (let filho in grafo[nohInicio]) {
+      pais[filho] = nohInicio;
+  }
+
+  let visitados = [];
+
+  let filhosT = grafo[nohInicio];
+  for (let cur in filhosT) {
+      let tempDist = heuristicaA[cur] + filhosT[cur];
+
+      somaDistanciaHeuristica[cur] = tempDist;
+  }
+
+  visitados.push(nohInicio);
+
+  let noh = nohMaisPertoA(somaDistanciaHeuristica, visitados);
+
+  while (noh && noh != nohFim) {
+
+      let filhos = grafo[noh]; 
+
+      if(!(noh === nohFim)) {                  
+          let caminhoMaisCurtoAux = [noh];
+          let paiAux = pais[noh];
+          while (paiAux) {
+              caminhoMaisCurtoAux.push(paiAux);
+              paiAux = pais[paiAux];
+          }
+          //tmpRoutes.push(caminhoMaisCurtoAux.reverse()); //Caminho mais curto até o momento
+          caminhoMaisCurtoAux.reverse();
+          let resultadoAux = {
+              caminho: caminhoMaisCurtoAux,
+          };
+          console.log(resultadoAux);
+      }
+
+
+      for (let filho in filhos) {
+          if (String(filho) === String(nohInicio)) {
+              continue
+          } else {
+
+             let novaDistancia = heuristicaA[filho] + filhos[filho];
+             
+
+              if(filho == nohFim) {
+                  somaDistanciaHeuristica[filho] = novaDistancia;
+
+                  pais[filho] = noh;
+              } else if ((!somaDistanciaHeuristica[filho] || somaDistanciaHeuristica[filho] > novaDistancia) && !visitados.includes(filho)) {
+              
+                  somaDistanciaHeuristica[filho] = novaDistancia;
+
+                  pais[filho] = noh;
+              }
+          }
+      }
+
+      visitados.push(noh);
+
+      noh = nohMaisPertoA(somaDistanciaHeuristica, visitados);
+  }
+  
+  let caminhoMaisCurto = [nohFim];
+
+  let pai = pais[nohFim];
+
+  while (pai) {
+      caminhoMaisCurto.push(pai);
+      pai = pais[pai];
+  }
+
+  caminhoMaisCurto.reverse(); //Caminho final mais curto
+  
+  let resultados = {
+      caminho: caminhoMaisCurto,
+  };
+  
+  return resultados;
+  
+};
+console.log("ESCOLHIDO A*",encontraCaminhoMaisCurtoA(grafo, "cinnabar", "cerulean"));
+
+//-----------------------------------------------FIM DO ALGORITMO A*--------------------------------------------------
 
 
 // ? recebe um array de rotas (array com nomes de cidades)
