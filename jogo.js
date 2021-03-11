@@ -94,6 +94,9 @@ const iconeCursor = {
   }
 }
 
+// ! 2 objetivos principais restantes para a linha
+// TODO otimizar o processo de desenho da linha, para que ela não passe do cursor
+// TODO manter tanto a posição final do cursor quanto os caminhos tracejados
 const pathLine = { 
   posIniX: 0,
   posIniY: 0,
@@ -103,13 +106,15 @@ const pathLine = {
   lastY: 0,
 
   desenha(rotas, last) {
+    // ? marcar cada movimento que o cursor já correu, e só permitir a linha ir até ele
+
     let deslocamento = 20;
     if (rotas == null) {
       console.log('Rotas está nulo');
       return;
     }
     contexto.lineWidth = 20;
-    if (last) {
+    if (last) { // ? se for a última, é a correta, e pinta de verde :)
       contexto.strokeStyle = 'green';
     }
     else {
@@ -119,25 +124,11 @@ const pathLine = {
     contexto.moveTo(pathLine.posIniX + deslocamento, pathLine.posIniY + deslocamento);
     pathLine.lastX = pathLine.posIniX + deslocamento;
     pathLine.lastY = pathLine.posIniY + deslocamento;
-    for (let i = 0; i < rotas.length; i++) {
-      // if (pathLine.lastX + rotas[i].x > iconeCursor.posX || pathLine.lastY + rotas[i].y > iconeCursor.posY) {
-      //   // console.log('Mas oq que é isso?', pathLine.lastX, rotas[i].x, pathLine.lastY, rotas[i].y);
-      //   contexto.lineTo(iconeCursor.posX, iconeCursor.posY);
-      //   // pathLine.lastX = pathLine.lastX + iconeCursor.posX;
-      //   // pathLine.lastY = pathLine.lastY + iconeCursor.posY;
-      //   break;
-      // }
-      // if (rotas[i].x < 0 || rotas[i].y < 0) {
-      //   console.log('meme:', rotas[i].x, rotas[i].y);
-      //   console.log('Aew')
-      //   contexto.lineTo(iconeCursor.posX, iconeCursor.posY);
-      //   pathLine.lastX = pathLine.lastX - iconeCursor.posX;
-      //   pathLine.lastY = pathLine.lastY - iconeCursor.posY;
-      //   break;
-      // }
-      contexto.lineTo(pathLine.lastX + rotas[i].x, pathLine.lastY + rotas[i].y);
-      pathLine.lastX = pathLine.lastX + rotas[i].x;
-      pathLine.lastY = pathLine.lastY + rotas[i].y;
+    for (movimento_linha = 0; movimento_linha < visit; movimento_linha++) {
+      contexto.lineTo(pathLine.lastX + rotas[movimento_linha].x, pathLine.lastY + rotas[movimento_linha].y);
+      pathLine.lastX = pathLine.lastX + rotas[movimento_linha].x;
+      pathLine.lastY = pathLine.lastY + rotas[movimento_linha].y;
+
     }
     contexto.stroke();
   }
@@ -911,26 +902,9 @@ let initialPosX = 0;
 let initialPosY = 0;
 let arrayTemp = [];
 let todasRotas = [];
+let movimento_linha = 0;
 
 console.log('Iniciando App');
-// console.log('ESOCLHIDO dijkstra cinnabar fuchsia',encontraCaminhoMaisCurto(grafo,"cinnabar","fuchsia"));
-// console.log('tmpRoutes de dijkstra:',tmpRoutes)
-
-// console.log("ESCOLHIDO A* cinnabar cerulean",encontraCaminhoMaisCurtoA(grafo, "cinnabar", "cerulean"));
-// console.log('tmpRoutes de A*:',tmpRoutes)
-
-
-// console.log(tmpRoutes,'rotas antes:')
-// console.log('Caminho mais curto', arrayTemp);
-// console.log('Temp:', tmpRoutes);
-
-//initialPos resetam o caminho pro início
-
-
-// let arrayTemp = encontraCaminhoMaisCurto(grafo, "pallet", "fuchsia").caminho
-// tmpRoutes.push(arrayTemp)
-// let todasRotas = route_to_moves([...tmpRoutes]);
-// console.log('todasRotas:',todasRotas)
 
 
 function loop() {
@@ -943,11 +917,10 @@ function loop() {
   planoDeFundo.desenha();
 
   if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
-    // segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
-    pathLine.desenha(todasRotas[route], (route + 1 == todasRotas.length) ? true : false);  //DEBUG
+    // ? roda continuamente, usando o loop como iterator
+    pathLine.desenha(todasRotas[route], (route + 1 == todasRotas.length) ? true : false);
     segueRota(todasRotas[route]);
   }
-
   frames = frames + 1;
   requestAnimationFrame(loop);
 }
