@@ -99,26 +99,47 @@ const pathLine = {
   posIniY: 0,
   posX: 0,
   posY: 0,
+  lastX: 0,
+  lastY: 0,
 
-  desenha(rotas){
-    console.log('posIniX:',pathLine.posIniX,'posIniY:',pathLine.posIniY)
-    // rotas.forEach(rota => {
-    //   contexto.beginPath()
-    //   contexto.moveTo(pathLine.posIniX + 20,pathLine.posIniY + 20)
-    //   console.log('indo pra:',pathLine)
-    //   rota.forEach(element => {
-    //     contexto.lineTo(pathLine.posX + element.x ,pathLine.posY + element.y )
-    //     pathLine.posX = pathLine.posIniX + 20 + element.x
-    //     pathLine.posY = pathLine.posIniY + 20 + element.y
-    //   });
-    //   contexto.stroke()
-    // })
-    contexto.beginPath()
-    contexto.moveTo(192,303) //COORDENADAS
-    // contexto.lineTo(iconeCursor.posX + 20,iconeCursor.posY + 20) // ? assim ele segue o boneco, mas não obedece o caminho
-    // contexto.lineTo(192,303 + 280) //COORDENADAS
-    // contexto.lineTo(192 + 110,303 + 280)
-    contexto.stroke()
+  desenha(rotas, last) {
+    let deslocamento = 20;
+    if (rotas == null) {
+      console.log('Rotas está nulo');
+      return;
+    }
+    contexto.lineWidth = 20;
+    if (last) {
+      contexto.strokeStyle = 'green';
+    }
+    else {
+      contexto.strokeStyle = 'red';
+    }
+    contexto.beginPath();
+    contexto.moveTo(pathLine.posIniX + deslocamento, pathLine.posIniY + deslocamento);
+    pathLine.lastX = pathLine.posIniX + deslocamento;
+    pathLine.lastY = pathLine.posIniY + deslocamento;
+    for (let i = 0; i < rotas.length; i++) {
+      // if (pathLine.lastX + rotas[i].x > iconeCursor.posX || pathLine.lastY + rotas[i].y > iconeCursor.posY) {
+      //   // console.log('Mas oq que é isso?', pathLine.lastX, rotas[i].x, pathLine.lastY, rotas[i].y);
+      //   contexto.lineTo(iconeCursor.posX, iconeCursor.posY);
+      //   // pathLine.lastX = pathLine.lastX + iconeCursor.posX;
+      //   // pathLine.lastY = pathLine.lastY + iconeCursor.posY;
+      //   break;
+      // }
+      // if (rotas[i].x < 0 || rotas[i].y < 0) {
+      //   console.log('meme:', rotas[i].x, rotas[i].y);
+      //   console.log('Aew')
+      //   contexto.lineTo(iconeCursor.posX, iconeCursor.posY);
+      //   pathLine.lastX = pathLine.lastX - iconeCursor.posX;
+      //   pathLine.lastY = pathLine.lastY - iconeCursor.posY;
+      //   break;
+      // }
+      contexto.lineTo(pathLine.lastX + rotas[i].x, pathLine.lastY + rotas[i].y);
+      pathLine.lastX = pathLine.lastX + rotas[i].x;
+      pathLine.lastY = pathLine.lastY + rotas[i].y;
+    }
+    contexto.stroke();
   }
 
 }
@@ -749,13 +770,14 @@ function loop() {
   if (route >= todasRotas.length) {
     // console.log('Todas as rotas já foram demonstradas');
     route = 0;
-    rodar_rotas = false
+    rodar_rotas = false;
   }
   planoDeFundo.desenha();
 
   if(rodar_rotas){ // ? se ele apertou o botão de rodar as rotas
-    segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
-    pathLine.desenha(todasRotas)  //DEBUG
+    // segueRota(todasRotas[route]); // ? roda continuamente, usando o loop como iterator
+    pathLine.desenha(todasRotas[route], (route + 1 == todasRotas.length) ? true : false);  //DEBUG
+    segueRota(todasRotas[route]);
   }
 
   frames = frames + 1;
