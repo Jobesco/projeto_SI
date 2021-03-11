@@ -8,38 +8,45 @@
 <body style="width: 100%;">
     <canvas id="game-canvas" width="1770" height="996"></canvas>
 
-    <div id="form_dijkstra"> 
-      <select name="origin_city" id="origin_city" class="selector">
-        <option value="cidOrigem" class="selection">Cidade Origem</option>
-        <option value="indigoPlateau" class="selection">Indigo Plateau</option>
-        <option value="viridian" class="selection">Viridian</option>
-        <option value="pewter" class="selection">Pewter</option>
-        <option value="cerulean" class="selection">Cerulean</option>
-        <option value="saffron" class="selection">Saffron</option>
-        <option value="celadon" class="selection">Celadon</option>
-        <option value="vermilion" class="selection">Vermillion</option>
-        <option value="lavender" class="selection">Lavender</option>
-        <option value="fuchsia" class="selection">Fuchsia</option>
-        <option value="cinnabar" class="selection">Cinnabar</option>
-        <option value="pallet" class="selection">Pallet</option>
-      </select>
+    <div id="form_dijkstra">
+      <div id="cities">
+        <select name="origin_city" id="origin_city" class="selector">
+          <option value="cidOrigem" class="selection">Cidade Origem</option>
+          <option value="indigoPlateau" class="selection">Indigo Plateau</option>
+          <option value="viridian" class="selection">Viridian</option>
+          <option value="pewter" class="selection">Pewter</option>
+          <option value="cerulean" class="selection">Cerulean</option>
+          <option value="saffron" class="selection">Saffron</option>
+          <option value="celadon" class="selection">Celadon</option>
+          <option value="vermilion" class="selection">Vermillion</option>
+          <option value="lavender" class="selection">Lavender</option>
+          <option value="fuchsia" class="selection">Fuchsia</option>
+          <option value="cinnabar" class="selection">Cinnabar</option>
+          <option value="pallet" class="selection">Pallet</option>
+        </select>
+
+        <select name="destination_city" id="destination_city" class="selector">
+          <option value="cidDestino" class="selection">Cidade Destino</option>
+          <option value="indigoPlateau" class="selection">Indigo Plateau</option>
+          <option value="viridian" class="selection">Viridian</option>
+          <option value="pewter" class="selection">Pewter</option>
+          <option value="cerulean" class="selection">Cerulean</option>
+          <option value="saffron" class="selection">Saffron</option>
+          <option value="celadon" class="selection">Celadon</option>
+          <option value="vermilion" class="selection">Vermillion</option>
+          <option value="lavender" class="selection">Lavender</option>
+          <option value="fuchsia" class="selection">Fuchsia</option>
+          <option value="cinnabar" class="selection">Cinnabar</option>
+          <option value="pallet" class="selection">Pallet</option>
+        </select>
+      </div>
       </br>
 
-      <select name="destination_city" id="destination_city" class="selector">
-        <option value="cidDestino" class="selection">Cidade Destino</option>
-        <option value="indigoPlateau" class="selection">Indigo Plateau</option>
-        <option value="viridian" class="selection">Viridian</option>
-        <option value="pewter" class="selection">Pewter</option>
-        <option value="cerulean" class="selection">Cerulean</option>
-        <option value="saffron" class="selection">Saffron</option>
-        <option value="celadon" class="selection">Celadon</option>
-        <option value="vermilion" class="selection">Vermillion</option>
-        <option value="lavender" class="selection">Lavender</option>
-        <option value="fuchsia" class="selection">Fuchsia</option>
-        <option value="cinnabar" class="selection">Cinnabar</option>
-        <option value="pallet" class="selection">Pallet</option>
+      <select name="algorithm" id="algorithm" class="selector">
+        <option value="ignore" class="selection">Algoritmo</option>
+        <option value="dijkstra" class="selection">Dijkstra</option>
+        <option value="astar" class="selection">A*</option>
       </select>
-      </br>
 
       <input type="submit" value="" onclick="buttonPress()" id="go-button">
     </div>
@@ -64,35 +71,49 @@
         #form_dijkstra{
           position: absolute;
           left: 1310px;
-          top: 75px;
+          top: 150px;
           display: flex;
           flex-direction: column;
+          align-items: center
+        }
+        #cities {
+          flex-direction: row;
         }
         .selection {
-          font-size: .5em !important;
+          font-size: 1em !important;
         }
         #go-button {
-          background: url('Botoes-bg-removed.png') -16px 270px;
-          width: 486px;
-          height: 232px;
+          background: url('Botoes-bg-removed.png') -8px -369px;
+          width: 244px;
+          height: 116px;
           border: 0px;
           padding: 0px;
         }
         #origin_city {
-          background: url('Botoes-bg-removed.png') -16px -13px;
-          width: 486px;
-          height: 232px;
+          background: url('Botoes-bg-removed.png') -8px -6px;
+          width: 244px;
+          height: 116px;
           border: 0px;
-          padding: 0px 60px;
-          font-size: 3em;
+          padding: 25px;
+          font-size: 1.5em;
+          margin: 0 15px 0 0;
         }
         #destination_city {
-          background: url('Botoes-bg-removed.png') -16px -13px;
-          width: 486px;
-          height: 232px;
+          background: url('Botoes-bg-removed.png') -8px -6px;
+          width: 244px;
+          height: 116px;
           border: 0px;
-          padding: 0px 60px;
-          font-size: 3em;
+          padding: 25px;
+          font-size: 1.5em;
+        }
+        #algorithm {
+          background: url('Botoes-bg-removed.png') -8px -6px;
+          width: 244px;
+          height: 116px;
+          border: 0px;
+          padding: 25px;
+          font-size: 1.5em;
+          margin: 0 0 15px 0;
         }
     </style>
 

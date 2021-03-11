@@ -175,20 +175,30 @@ function buttonPress() {
   
   let origin = document.getElementById("origin_city").value
   let destination = document.getElementById("destination_city").value
+  let algorithm = document.getElementById("algorithm").value
 
   if(origin == 'cidOrigem' || destination == 'cidDestino') alert('Escolha uma cidade')
-  else if(origin != destination && !rodar_rotas){ // ? impede de jogar uma nova rota do nada
+  else if(origin != destination && !rodar_rotas && algorithm != 'ignore'){ // ? impede de jogar uma nova rota do nada
     rodar_rotas = true
 
-    //encontraCaminhoMaisCurto zera automaticamente :)
-    arrayTemp = encontraCaminhoMaisCurto(grafo, origin, destination).caminho
+    if(algorithm == 'dijkstra'){
+      
+      //encontraCaminhoMaisCurto zera tmpArray automaticamente :)
+      arrayTemp = encontraCaminhoMaisCurto(grafo, origin, destination).caminho
+    }
+    else if(algorithm == 'astar'){
+      arrayTemp = encontraCaminhoMaisCurtoA(grafo, origin, destination).caminho
+    }
+
     tmpRoutes.push(arrayTemp)
     todasRotas = route_to_moves([...tmpRoutes]);
 
     console.log('rotas:',todasRotas)
   }
   else if(rodar_rotas) alert("Espere o loop acabar!")
-  else alert("Selecione cidades diferentes!")
+  else if(algorithm != 'ignore') alert("Selecione cidades diferentes!")
+  else alert('Escolha um algoritmo!')
+
 }
 
 // Array de cidades para o percurso no canvas
@@ -647,7 +657,7 @@ let encontraCaminhoMaisCurto = (grafo, nohInicio, nohFim) => {
         distancia: distancias[noh],
         caminho: caminhoMaisCurtoAux,
       };
-      console.log(resultadoAux);
+      // console.log(resultadoAux);
     }
 
     for (let filho in filhos) {
@@ -727,7 +737,6 @@ let distanciaEntreDoisPontos = (cidadeAtual, cidadeDestino)  => {
   return res/10;
 };
 
-console.log(distanciaEntreDoisPontos("cinnabar","fuchsia"));
 
 let nohMaisPertoA = (distanciasA, visitados) => {
 
@@ -746,7 +755,7 @@ let nohMaisPertoA = (distanciasA, visitados) => {
 };
 
 let encontraCaminhoMaisCurtoA = (grafo, nohInicio, nohFim) => {
-  //tmpRoutes = [];
+  tmpRoutes = [];
   atualizarDistancias(nohFim);
 
   let somaDistanciaHeuristica = {};
@@ -796,12 +805,9 @@ let encontraCaminhoMaisCurtoA = (grafo, nohInicio, nohFim) => {
               caminhoMaisCurtoAux.push(paiAux);
               paiAux = pais[paiAux];
           }
-          //tmpRoutes.push(caminhoMaisCurtoAux.reverse()); //Caminho mais curto até o momento
-          caminhoMaisCurtoAux.reverse();
-          let resultadoAux = {
-              caminho: caminhoMaisCurtoAux,
-          };
-          console.log(resultadoAux);
+          tmpRoutes.push(caminhoMaisCurtoAux.reverse()); //Caminho mais curto até o momento
+          // caminhoMaisCurtoAux.reverse();
+          // console.log(resultadoAux);
       }
 
 
@@ -849,7 +855,6 @@ let encontraCaminhoMaisCurtoA = (grafo, nohInicio, nohFim) => {
   return resultados;
   
 };
-console.log("ESCOLHIDO A*",encontraCaminhoMaisCurtoA(grafo, "cinnabar", "cerulean"));
 
 //-----------------------------------------------FIM DO ALGORITMO A*--------------------------------------------------
 
@@ -908,6 +913,12 @@ let arrayTemp = [];
 let todasRotas = [];
 
 console.log('Iniciando App');
+// console.log('ESOCLHIDO dijkstra cinnabar fuchsia',encontraCaminhoMaisCurto(grafo,"cinnabar","fuchsia"));
+// console.log('tmpRoutes de dijkstra:',tmpRoutes)
+
+// console.log("ESCOLHIDO A* cinnabar cerulean",encontraCaminhoMaisCurtoA(grafo, "cinnabar", "cerulean"));
+// console.log('tmpRoutes de A*:',tmpRoutes)
+
 
 // console.log(tmpRoutes,'rotas antes:')
 // console.log('Caminho mais curto', arrayTemp);
