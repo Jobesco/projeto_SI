@@ -95,7 +95,7 @@ const iconeCursor = {
 }
 
 // ! 2 objetivos principais restantes para a linha
-// TODO otimizar o processo de desenho da linha, para que ela não passe do cursor
+// TODO implementar uma linha que siga logo atrás do cursor
 // TODO manter tanto a posição final do cursor quanto os caminhos tracejados
 const pathLine = { 
   posIniX: 0,
@@ -124,12 +124,23 @@ const pathLine = {
     contexto.moveTo(pathLine.posIniX + deslocamento, pathLine.posIniY + deslocamento);
     pathLine.lastX = pathLine.posIniX + deslocamento;
     pathLine.lastY = pathLine.posIniY + deslocamento;
-    for (movimento_linha = 0; movimento_linha < visit; movimento_linha++) {
-      contexto.lineTo(pathLine.lastX + rotas[movimento_linha].x, pathLine.lastY + rotas[movimento_linha].y);
-      pathLine.lastX = pathLine.lastX + rotas[movimento_linha].x;
-      pathLine.lastY = pathLine.lastY + rotas[movimento_linha].y;
+    if(false){
+      for (movimento_linha = 0; movimento_linha < visit; movimento_linha++) {
+        contexto.lineTo(pathLine.lastX + rotas[movimento_linha].x, pathLine.lastY + rotas[movimento_linha].y);
+        pathLine.lastX = pathLine.lastX + rotas[movimento_linha].x;
+        pathLine.lastY = pathLine.lastY + rotas[movimento_linha].y;
 
+      }
     }
+    else{
+      for (movimento_linha = 0; movimento_linha < rotas.length; movimento_linha++) {
+        contexto.lineTo(pathLine.lastX + rotas[movimento_linha].x, pathLine.lastY + rotas[movimento_linha].y);
+        pathLine.lastX = pathLine.lastX + rotas[movimento_linha].x;
+        pathLine.lastY = pathLine.lastY + rotas[movimento_linha].y;
+
+      }  
+    }
+    
     contexto.stroke();
   }
 
@@ -184,7 +195,8 @@ function buttonPress() {
     tmpRoutes.push(arrayTemp)
     todasRotas = route_to_moves([...tmpRoutes]);
 
-    console.log('rotas:',todasRotas)
+    console.log('todasRotas:',todasRotas)
+    esta_demonstrando = true
   }
   else if(rodar_rotas) alert("Espere o loop acabar!")
   else if(algorithm != 'ignore') alert("Selecione cidades diferentes!")
@@ -903,6 +915,7 @@ let initialPosY = 0;
 let arrayTemp = [];
 let todasRotas = [];
 let movimento_linha = 0;
+let esta_demonstrando = false; // ? usado para manter a posição do cursor e as linhas
 
 console.log('Iniciando App');
 
@@ -913,6 +926,7 @@ function loop() {
     // console.log('Todas as rotas já foram demonstradas');
     route = 0;
     rodar_rotas = false;
+    esta_demonstrando = false;
   }
   planoDeFundo.desenha();
 
@@ -921,6 +935,13 @@ function loop() {
     pathLine.desenha(todasRotas[route], (route + 1 == todasRotas.length) ? true : false);
     segueRota(todasRotas[route]);
   }
+
+  if(!esta_demonstrando && todasRotas.length){
+    todasRotas.forEach((rota,i) => {
+      pathLine.desenha(rota, (i + 1 == todasRotas.length) ? true : false)
+    })
+  }
+
   frames = frames + 1;
   requestAnimationFrame(loop);
 }
